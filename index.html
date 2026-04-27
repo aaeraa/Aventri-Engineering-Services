@@ -1,0 +1,2426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Aventri Engineering Services – Construction Information System</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --navy:#0d1b2a;--navy-mid:#152338;--navy-light:#1e3355;
+  --accent:#f5820a;--accent-glow:rgba(245,130,10,0.15);--accent-dark:#c96807;
+  --white:#fff;--gray-50:#f7f8fa;--gray-100:#eef0f4;--gray-200:#d4d8e2;
+  --gray-400:#8a93a8;--gray-600:#4e5872;
+  --green:#1dbf73;--green-bg:rgba(29,191,115,0.12);
+  --red:#e53e3e;--red-bg:rgba(229,62,62,0.12);
+  --yellow:#d97706;--yellow-bg:rgba(217,119,6,0.12);
+  --blue:#3b82f6;--blue-bg:rgba(59,130,246,0.12);
+  --purple:#9333ea;--purple-bg:rgba(147,51,234,0.12);
+  --sidebar-w:240px;--top-h:64px;--radius:12px;
+  --shadow:0 4px 24px rgba(13,27,42,0.10);--shadow-md:0 8px 32px rgba(13,27,42,0.18);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--gray-50);color:var(--navy);min-height:100vh;overflow-x:hidden;}
+h1,h2,h3,h4,h5{font-family:'Syne',sans-serif;}
+
+/* TOPBAR */
+.topbar{position:fixed;top:0;left:0;right:0;z-index:100;height:var(--top-h);background:var(--navy);display:flex;align-items:center;padding:0 24px 0 0;border-bottom:1px solid var(--navy-light);box-shadow:0 2px 16px rgba(0,0,0,0.25);}
+.topbar-logo{width:var(--sidebar-w);display:flex;align-items:center;gap:10px;padding:0 20px;flex-shrink:0;}
+.logo-icon{width:36px;height:36px;background:var(--accent);border-radius:8px;display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:800;font-size:16px;color:#fff;letter-spacing:-1px;flex-shrink:0;}
+.logo-text{display:flex;flex-direction:column;line-height:1.1;}
+.logo-name{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:#fff;}
+.logo-sub{font-size:10px;color:var(--gray-400);font-weight:400;letter-spacing:.5px;text-transform:uppercase;}
+.topbar-center{flex:1;padding:0 24px;}
+.search-bar{display:flex;align-items:center;gap:10px;background:var(--navy-light);border:1.5px solid rgba(255,255,255,0.07);border-radius:8px;padding:8px 14px;max-width:380px;color:var(--gray-400);font-size:13px;cursor:text;transition:border .2s;position:relative;}
+.search-bar:hover,.search-bar:focus-within{border-color:var(--accent);}
+.search-bar input{background:none;border:none;outline:none;color:#fff;font-family:'DM Sans',sans-serif;font-size:13px;flex:1;width:100%;}
+.search-bar input::placeholder{color:var(--gray-400);}
+.search-results{position:absolute;top:calc(100% + 8px);left:0;right:0;background:#fff;border-radius:10px;box-shadow:var(--shadow-md);border:1px solid var(--gray-100);z-index:9999;display:none;max-height:260px;overflow-y:auto;}
+.search-results.open{display:block;}
+.search-result-item{padding:10px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;gap:10px;color:var(--navy);}
+.search-result-item:last-child{border-bottom:none;}
+.search-result-item:hover{background:var(--gray-50);}
+.search-result-tag{font-size:10px;padding:2px 8px;border-radius:10px;font-weight:600;margin-left:auto;}
+.topbar-right{display:flex;align-items:center;gap:8px;}
+.icon-btn{width:38px;height:38px;border-radius:8px;border:none;background:var(--navy-light);color:var(--gray-400);display:flex;align-items:center;justify-content:center;cursor:pointer;position:relative;transition:background .2s,color .2s;}
+.icon-btn:hover{background:rgba(255,255,255,0.08);color:#fff;}
+.notif-dot{width:8px;height:8px;background:var(--accent);border-radius:50%;position:absolute;top:6px;right:6px;border:2px solid var(--navy);}
+.user-chip{display:flex;align-items:center;gap:10px;padding:5px 12px 5px 5px;border-radius:9px;background:var(--navy-light);cursor:pointer;transition:background .2s;margin-left:4px;}
+.user-chip:hover{background:rgba(245,130,10,0.15);}
+.user-avatar{width:30px;height:30px;border-radius:7px;background:var(--accent);display:flex;align-items:center;justify-content:center;font-family:'Syne',sans-serif;font-weight:700;font-size:12px;color:#fff;flex-shrink:0;}
+.user-info{display:flex;flex-direction:column;line-height:1.2;}
+.user-name{font-size:12px;font-weight:600;color:#fff;}
+.user-role{font-size:10px;color:var(--gray-400);}
+
+/* SIDEBAR */
+.sidebar{position:fixed;left:0;top:var(--top-h);bottom:0;z-index:90;width:var(--sidebar-w);background:var(--navy);border-right:1px solid var(--navy-light);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;padding-bottom:16px;}
+.sidebar::-webkit-scrollbar{width:4px;}
+.sidebar::-webkit-scrollbar-thumb{background:var(--navy-light);border-radius:2px;}
+.nav-section-label{font-size:10px;font-weight:600;color:var(--gray-600);text-transform:uppercase;letter-spacing:1px;padding:20px 20px 6px;}
+.nav-item{display:flex;align-items:center;gap:12px;padding:10px 20px;cursor:pointer;color:var(--gray-400);font-size:13.5px;font-weight:500;position:relative;transition:color .18s,background .18s;border-left:3px solid transparent;user-select:none;}
+.nav-item:hover{background:var(--navy-light);color:#fff;border-left-color:var(--navy-light);}
+.nav-item.active{background:var(--accent-glow);color:var(--accent);border-left-color:var(--accent);font-weight:600;}
+.nav-item svg{flex-shrink:0;}
+.nav-badge{margin-left:auto;background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:1px 7px;border-radius:20px;}
+.sidebar-footer{margin-top:auto;padding:16px 20px;border-top:1px solid var(--navy-light);}
+.logout-btn{display:flex;align-items:center;gap:10px;padding:10px 14px;border-radius:8px;color:var(--gray-400);font-size:13px;font-weight:500;cursor:pointer;transition:background .2s,color .2s;background:none;border:none;width:100%;font-family:'DM Sans',sans-serif;}
+.logout-btn:hover{background:var(--red-bg);color:var(--red);}
+
+/* MAIN */
+.main{margin-left:var(--sidebar-w);margin-top:var(--top-h);padding:28px 32px;min-height:calc(100vh - var(--top-h));}
+.page{display:none;animation:fadeIn .3s ease;}
+.page.active{display:block;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}
+
+/* PAGE HEADER */
+.page-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:28px;}
+.page-title{font-size:26px;font-weight:800;color:var(--navy);line-height:1.1;}
+.page-subtitle{font-size:13px;color:var(--gray-400);margin-top:4px;}
+.page-actions{display:flex;gap:10px;align-items:center;}
+
+/* BUTTONS */
+.btn{display:inline-flex;align-items:center;gap:8px;padding:10px 20px;border-radius:9px;border:none;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:600;cursor:pointer;transition:all .18s;}
+.btn-primary{background:var(--accent);color:#fff;}
+.btn-primary:hover{background:var(--accent-dark);transform:translateY(-1px);box-shadow:0 4px 16px rgba(245,130,10,.35);}
+.btn-outline{background:#fff;color:var(--navy);border:1.5px solid var(--gray-200);}
+.btn-outline:hover{border-color:var(--accent);color:var(--accent);}
+.btn-ghost{background:transparent;color:var(--gray-600);padding:8px 12px;}
+.btn-ghost:hover{background:var(--gray-100);}
+.btn-sm{padding:7px 14px;font-size:12px;border-radius:7px;}
+.btn-danger{background:var(--red);color:#fff;}
+.btn-danger:hover{background:#c53030;}
+.btn-success{background:var(--green);color:#fff;}
+.btn-success:hover{background:#17a362;}
+.btn-warning{background:var(--yellow);color:#fff;}
+
+/* STAT CARDS */
+.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:18px;margin-bottom:28px;}
+.stat-card{background:#fff;border-radius:var(--radius);padding:22px 24px;border:1px solid var(--gray-100);box-shadow:var(--shadow);position:relative;overflow:hidden;transition:box-shadow .2s,transform .2s;cursor:default;}
+.stat-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.stat-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent-line,var(--accent));}
+.stat-label{font-size:11.5px;font-weight:600;color:var(--gray-400);text-transform:uppercase;letter-spacing:.5px;}
+.stat-value{font-family:'Syne',sans-serif;font-size:34px;font-weight:800;color:var(--navy);margin:6px 0 2px;line-height:1;}
+.stat-change{font-size:12px;color:var(--gray-400);display:flex;align-items:center;gap:4px;}
+.stat-change.up{color:var(--green);}
+.stat-change.down{color:var(--red);}
+.stat-icon{position:absolute;right:18px;top:50%;transform:translateY(-50%);width:48px;height:48px;border-radius:10px;display:flex;align-items:center;justify-content:center;}
+
+/* CARDS */
+.card{background:#fff;border-radius:var(--radius);border:1px solid var(--gray-100);box-shadow:var(--shadow);overflow:hidden;}
+.card-header{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid var(--gray-100);}
+.card-title{font-family:'Syne',sans-serif;font-size:15px;font-weight:700;}
+.card-body{padding:22px;}
+
+/* GRIDS */
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:20px;}
+.grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:20px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:20px;}
+
+/* TABLES */
+.table-wrap{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{background:var(--gray-50);font-size:11px;font-weight:700;color:var(--gray-600);text-transform:uppercase;letter-spacing:.5px;padding:12px 16px;text-align:left;border-bottom:1px solid var(--gray-100);}
+td{padding:13px 16px;border-bottom:1px solid var(--gray-100);font-size:13.5px;color:var(--navy);}
+tr:last-child td{border-bottom:none;}
+tr:hover td{background:var(--gray-50);}
+
+/* BADGES */
+.badge{display:inline-flex;align-items:center;gap:5px;padding:4px 10px;border-radius:20px;font-size:11.5px;font-weight:600;white-space:nowrap;}
+.badge::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;}
+.badge-green{background:var(--green-bg);color:var(--green);}
+.badge-red{background:var(--red-bg);color:var(--red);}
+.badge-yellow{background:var(--yellow-bg);color:var(--yellow);}
+.badge-blue{background:var(--blue-bg);color:var(--blue);}
+.badge-gray{background:var(--gray-100);color:var(--gray-600);}
+.badge-purple{background:var(--purple-bg);color:var(--purple);}
+
+/* PROGRESS */
+.progress-bar-wrap{background:var(--gray-100);border-radius:20px;height:8px;overflow:hidden;}
+.progress-bar-fill{height:100%;border-radius:20px;background:linear-gradient(90deg,var(--accent),#f5a623);transition:width 1s ease;}
+.progress-bar-fill.green{background:linear-gradient(90deg,var(--green),#56f59a);}
+.progress-bar-fill.blue{background:linear-gradient(90deg,var(--blue),#60a5fa);}
+.progress-bar-fill.red{background:linear-gradient(90deg,var(--red),#f87171);}
+
+/* FORMS */
+.form-group{margin-bottom:18px;}
+label{display:block;font-size:12.5px;font-weight:600;color:var(--gray-600);margin-bottom:6px;}
+input[type=text],input[type=date],input[type=number],input[type=email],input[type=password],select,textarea{width:100%;padding:10px 14px;border:1.5px solid var(--gray-200);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13.5px;color:var(--navy);background:#fff;transition:border .2s,box-shadow .2s;outline:none;}
+input:focus,select:focus,textarea:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,130,10,.12);}
+textarea{resize:vertical;min-height:90px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:16px;}
+.form-row-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px;}
+.form-hint{font-size:11.5px;color:var(--gray-400);margin-top:4px;}
+.input-error{border-color:var(--red)!important;}
+.error-msg{font-size:11.5px;color:var(--red);margin-top:4px;}
+
+/* ACTIVITY */
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:12px 0;border-bottom:1px solid var(--gray-100);}
+.activity-item:last-child{border-bottom:none;}
+.activity-dot{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.activity-text{font-size:13px;line-height:1.5;}
+.activity-time{font-size:11px;color:var(--gray-400);margin-top:2px;}
+
+/* PROJECT CARDS */
+.project-cards-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:18px;}
+.project-card{background:#fff;border-radius:var(--radius);border:1px solid var(--gray-100);box-shadow:var(--shadow);padding:20px;transition:box-shadow .2s,transform .2s;cursor:pointer;}
+.project-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.project-card-header{display:flex;align-items:flex-start;justify-content:space-between;margin-bottom:10px;}
+.project-name{font-family:'Syne',sans-serif;font-weight:700;font-size:14.5px;}
+.project-location{font-size:12px;color:var(--gray-400);margin-top:3px;}
+.project-progress-row{display:flex;align-items:center;justify-content:space-between;margin:12px 0 6px;}
+.project-pct{font-family:'Syne',sans-serif;font-weight:700;font-size:13px;color:var(--accent);}
+.project-meta{display:flex;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--gray-100);}
+.project-meta-item{display:flex;align-items:center;gap:5px;font-size:11.5px;color:var(--gray-400);}
+
+/* EQUIPMENT */
+.equip-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:16px;}
+.equip-card{background:#fff;border-radius:var(--radius);border:1px solid var(--gray-100);box-shadow:var(--shadow);padding:18px;transition:box-shadow .2s,transform .2s;}
+.equip-card:hover{box-shadow:var(--shadow-md);transform:translateY(-2px);}
+.equip-icon{width:44px;height:44px;border-radius:10px;background:var(--gray-100);display:flex;align-items:center;justify-content:center;margin-bottom:12px;font-size:22px;}
+.equip-name{font-family:'Syne',sans-serif;font-weight:700;font-size:13.5px;}
+.equip-detail{font-size:12px;color:var(--gray-400);margin-top:3px;}
+.equip-status{margin-top:12px;display:flex;align-items:center;justify-content:space-between;}
+
+/* TABS */
+.tabs{display:flex;gap:4px;border-bottom:2px solid var(--gray-100);margin-bottom:24px;}
+.tab-btn{padding:10px 18px;border:none;background:none;font-family:'DM Sans',sans-serif;font-size:13.5px;font-weight:500;color:var(--gray-400);cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px;transition:color .2s,border-color .2s;}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent);font-weight:600;}
+.tab-btn:hover:not(.active){color:var(--navy);}
+.tab-content{display:none;}
+.tab-content.active{display:block;}
+
+/* GANTT */
+.gantt-row{display:flex;align-items:center;gap:0;margin-bottom:8px;}
+.gantt-label{width:180px;font-size:12px;color:var(--navy);font-weight:500;flex-shrink:0;padding-right:12px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.gantt-track{flex:1;height:22px;background:var(--gray-100);border-radius:4px;position:relative;overflow:hidden;}
+.gantt-bar{position:absolute;top:3px;height:16px;border-radius:3px;background:linear-gradient(90deg,var(--accent),#f5a623);display:flex;align-items:center;padding:0 8px;font-size:10px;font-weight:600;color:#fff;white-space:nowrap;}
+.gantt-bar.green{background:linear-gradient(90deg,var(--green),#56f59a);}
+.gantt-bar.blue{background:linear-gradient(90deg,var(--blue),#60a5fa);}
+.gantt-bar.red{background:linear-gradient(90deg,var(--red),#f87171);}
+
+/* NOTIFICATION PANEL */
+.notif-panel{position:fixed;top:var(--top-h);right:0;width:340px;height:calc(100vh - var(--top-h));background:#fff;z-index:200;border-left:1px solid var(--gray-100);box-shadow:-8px 0 32px rgba(0,0,0,.08);transform:translateX(100%);transition:transform .3s ease;display:flex;flex-direction:column;}
+.notif-panel.open{transform:translateX(0);}
+.notif-panel-header{padding:20px 20px 14px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;}
+.notif-panel-title{font-family:'Syne',sans-serif;font-weight:700;font-size:16px;}
+.notif-list{flex:1;overflow-y:auto;padding:8px 0;}
+.notif-item{padding:12px 20px;display:flex;gap:12px;cursor:pointer;transition:background .15s;}
+.notif-item:hover{background:var(--gray-50);}
+.notif-icon{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.notif-content{flex:1;}
+.notif-msg{font-size:13px;line-height:1.45;color:var(--navy);}
+.notif-time{font-size:11px;color:var(--gray-400);margin-top:3px;}
+.notif-unread{background:rgba(245,130,10,0.04);}
+
+/* MODAL */
+.modal-overlay{position:fixed;inset:0;background:rgba(13,27,42,.5);z-index:300;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;padding:16px;}
+.modal-overlay.open{opacity:1;pointer-events:all;}
+.modal{background:#fff;border-radius:16px;width:560px;max-width:100%;max-height:90vh;box-shadow:0 24px 64px rgba(0,0,0,.25);transform:translateY(16px) scale(.98);transition:transform .25s ease;overflow:hidden;display:flex;flex-direction:column;}
+.modal-overlay.open .modal{transform:translateY(0) scale(1);}
+.modal-lg{width:700px;}
+.modal-header{padding:22px 24px 16px;border-bottom:1px solid var(--gray-100);display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.modal-title{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;}
+.modal-body{padding:24px;overflow-y:auto;flex:1;}
+.modal-footer{padding:16px 24px;border-top:1px solid var(--gray-100);display:flex;justify-content:flex-end;gap:10px;flex-shrink:0;}
+
+/* UPLOAD ZONE */
+.upload-zone{border:2px dashed var(--gray-200);border-radius:10px;padding:28px;text-align:center;color:var(--gray-400);font-size:13px;cursor:pointer;transition:border-color .2s,background .2s;}
+.upload-zone:hover,.upload-zone.drag-over{border-color:var(--accent);background:var(--accent-glow);}
+
+/* AVATAR STACK */
+.avatar-stack{display:flex;}
+.avatar-mini{width:24px;height:24px;border-radius:6px;background:var(--accent);color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;border:2px solid #fff;margin-right:-6px;font-family:'Syne',sans-serif;}
+.avatar-mini:nth-child(2){background:var(--blue);}
+.avatar-mini:nth-child(3){background:var(--green);}
+.avatar-mini:nth-child(4){background:var(--purple);}
+
+/* SECTION GAP */
+.section-gap{margin-bottom:24px;}
+
+/* COST BARS */
+.cost-bars{display:flex;align-items:flex-end;gap:10px;height:140px;padding-bottom:8px;}
+.cost-bar-wrap{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;height:100%;justify-content:flex-end;}
+.cost-bar{width:100%;border-radius:4px 4px 0 0;transition:height .6s ease;}
+.cost-bar-label{font-size:10px;color:var(--gray-400);white-space:nowrap;}
+
+/* TOOLTIP */
+[data-tip]{position:relative;}
+[data-tip]:hover::after{content:attr(data-tip);position:absolute;bottom:calc(100% + 8px);left:50%;transform:translateX(-50%);background:var(--navy);color:#fff;font-size:11px;padding:4px 10px;border-radius:6px;white-space:nowrap;pointer-events:none;z-index:9999;}
+
+/* TOAST */
+.toast-container{position:fixed;bottom:24px;right:24px;z-index:9999;display:flex;flex-direction:column;gap:10px;pointer-events:none;}
+.toast{background:var(--navy);color:#fff;padding:14px 18px;border-radius:12px;font-size:13px;font-weight:500;box-shadow:var(--shadow-md);display:flex;align-items:center;gap:10px;pointer-events:all;animation:toastIn .3s ease;max-width:340px;}
+.toast.success{background:var(--green);}
+.toast.error{background:var(--red);}
+.toast.warning{background:var(--yellow);}
+@keyframes toastIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+
+/* CONFIRM DIALOG */
+.confirm-overlay{position:fixed;inset:0;background:rgba(13,27,42,.5);z-index:9999;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity .2s;}
+.confirm-overlay.open{opacity:1;pointer-events:all;}
+.confirm-box{background:#fff;border-radius:14px;padding:28px;width:380px;max-width:95vw;box-shadow:0 24px 64px rgba(0,0,0,.25);transform:scale(.96);transition:transform .2s;}
+.confirm-overlay.open .confirm-box{transform:scale(1);}
+.confirm-title{font-family:'Syne',sans-serif;font-weight:700;font-size:17px;margin-bottom:8px;}
+.confirm-msg{font-size:13.5px;color:var(--gray-600);line-height:1.5;}
+.confirm-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px;}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:48px 20px;color:var(--gray-400);}
+.empty-state h3{font-family:'Syne',sans-serif;font-size:16px;color:var(--navy);margin-bottom:6px;}
+.empty-state p{font-size:13px;}
+
+/* BOQ */
+.boq-total-row td{font-weight:700;background:var(--gray-50);font-family:'Syne',sans-serif;}
+
+/* SCROLLBAR */
+.main::-webkit-scrollbar{width:6px;}
+.main::-webkit-scrollbar-thumb{background:var(--gray-200);border-radius:3px;}
+
+/* SEARCH OVERLAY */
+.search-overlay{position:fixed;inset:0;z-index:9998;background:transparent;}
+
+/* RESPONSIVE */
+@media(max-width:1100px){.grid-2-1{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}.grid-3{grid-template-columns:1fr 1fr}}
+@media(max-width:768px){.sidebar{transform:translateX(-100%);transition:transform .3s}.main{margin-left:0;padding:20px 16px}.topbar-logo{width:auto}.search-bar{display:none}.grid-3{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<!-- TOPBAR -->
+<header class="topbar">
+  <div class="topbar-logo">
+    <div class="logo-icon">AV</div>
+    <div class="logo-text">
+      <span class="logo-name">Aventri Engineering Services</span>
+      <span class="logo-sub">Construction Info System</span>
+    </div>
+  </div>
+  <div class="topbar-center">
+    <div class="search-bar" id="globalSearchBar">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      <input id="globalSearchInput" type="text" placeholder="Search projects, reports, requests…" autocomplete="off"/>
+      <div class="search-results" id="searchResults"></div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <button class="icon-btn" onclick="toggleNotif()" data-tip="Notifications" id="notifBtn">
+      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+      <span class="notif-dot" id="notifDot"></span>
+    </button>
+    <button class="icon-btn" onclick="showPage('users')" data-tip="Settings">
+      <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <div class="user-chip" onclick="showPage('users')">
+      <div class="user-avatar" id="topUserAvatar">AM</div>
+      <div class="user-info">
+        <span class="user-name" id="topUserName">Arabella Manao</span>
+        <span class="user-role" id="topUserRole">Administrator</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- SIDEBAR -->
+<nav class="sidebar" id="sidebar">
+  <span class="nav-section-label">Overview</span>
+  <div class="nav-item active" data-page="dashboard" onclick="showPage('dashboard')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+    Dashboard
+  </div>
+  <span class="nav-section-label">Project</span>
+  <div class="nav-item" data-page="projects" onclick="showPage('projects')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+    Projects
+    <span class="nav-badge" id="navBadgeProjects">10</span>
+  </div>
+  <div class="nav-item" data-page="scheduling" onclick="showPage('scheduling')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+    Scheduling
+  </div>
+  <span class="nav-section-label">Operations</span>
+  <div class="nav-item" data-page="dailyreports" onclick="showPage('dailyreports')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+    Daily Reports
+    <span class="nav-badge" id="navBadgeReports">0</span>
+  </div>
+  <div class="nav-item" data-page="material" onclick="showPage('material')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    Material Requests
+    <span class="nav-badge" id="navBadgeMaterial">0</span>
+  </div>
+  <div class="nav-item" data-page="inventory" onclick="showPage('inventory')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+    Inventory
+  </div>
+  <span class="nav-section-label">Resources</span>
+  <div class="nav-item" data-page="payroll" onclick="showPage('payroll')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+    Payroll & Attendance
+  </div>
+  <div class="nav-item" data-page="equipment" onclick="showPage('equipment')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    Equipment
+  </div>
+  <span class="nav-section-label">Finance</span>
+  <div class="nav-item" data-page="boq" onclick="showPage('boq')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+    Cost Estimation & BOQ
+  </div>
+  <span class="nav-section-label">System</span>
+  <div class="nav-item" data-page="documents" onclick="showPage('documents')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"/><polyline points="13 2 13 9 20 9"/></svg>
+    Documents
+  </div>
+  <div class="nav-item" data-page="reports" onclick="showPage('reports')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+    Reports & Analytics
+  </div>
+  <div class="nav-item" data-page="users" onclick="showPage('users')">
+    <svg width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+    User Management
+  </div>
+  <div class="sidebar-footer">
+    <button class="logout-btn" onclick="handleLogout()">
+      <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      Sign Out
+    </button>
+  </div>
+</nav>
+
+<!-- NOTIFICATION PANEL -->
+<div class="notif-panel" id="notifPanel">
+  <div class="notif-panel-header">
+    <span class="notif-panel-title">Notifications</span>
+    <div style="display:flex;gap:8px;align-items:center;">
+      <button class="btn btn-ghost btn-sm" onclick="markAllRead()" style="font-size:11px;">Mark all read</button>
+      <button class="btn btn-ghost btn-sm" onclick="toggleNotif()">✕</button>
+    </div>
+  </div>
+  <div class="notif-list" id="notifList"></div>
+</div>
+
+<!-- MAIN CONTENT -->
+<main class="main" id="mainContent">
+
+<!-- ═══ DASHBOARD ═══ -->
+<div class="page active" id="page-dashboard">
+  <div class="page-header">
+    <div>
+      <h1 class="page-title">Dashboard</h1>
+      <p class="page-subtitle" id="dashGreeting">Welcome back, Arabella. Here's your company overview for today.</p>
+    </div>
+    <div class="page-actions">
+      <span style="font-size:12px;color:var(--gray-400);" id="dashDate"></span>
+      <button class="btn btn-primary btn-sm" onclick="openModal('addProjectModal')">
+        <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        New Project
+      </button>
+    </div>
+  </div>
+  <div class="stat-grid" id="dashStatGrid">
+    <div class="stat-card"><div class="stat-label">Total Projects</div><div class="stat-value" id="dStat1">—</div><div class="stat-change up" id="dStat1c"></div><div class="stat-icon" style="background:var(--blue-bg)"><svg width="22" height="22" fill="none" stroke="var(--blue)" stroke-width="2" viewBox="0 0 24 24"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg></div></div>
+    <div class="stat-card" style="--accent-line:var(--green)"><div class="stat-label">Ongoing</div><div class="stat-value" id="dStat2">—</div><div class="stat-change">Active projects</div><div class="stat-icon" style="background:var(--green-bg)"><svg width="22" height="22" fill="none" stroke="var(--green)" stroke-width="2" viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div></div>
+    <div class="stat-card" style="--accent-line:var(--red)"><div class="stat-label">Delayed</div><div class="stat-value" id="dStat3">—</div><div class="stat-change down">Needs attention</div><div class="stat-icon" style="background:var(--red-bg)"><svg width="22" height="22" fill="none" stroke="var(--red)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div></div>
+    <div class="stat-card" style="--accent-line:var(--purple)"><div class="stat-label">Pending Requests</div><div class="stat-value" id="dStat4">—</div><div class="stat-change">Material requests</div><div class="stat-icon" style="background:var(--purple-bg)"><svg width="22" height="22" fill="none" stroke="var(--purple)" stroke-width="2" viewBox="0 0 24 24"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/></svg></div></div>
+    <div class="stat-card" style="--accent-line:var(--yellow)"><div class="stat-label">Workers Today</div><div class="stat-value" id="dStat5">—</div><div class="stat-change up" id="dStat5c"></div><div class="stat-icon" style="background:var(--yellow-bg)"><svg width="22" height="22" fill="none" stroke="var(--yellow)" stroke-width="2" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg></div></div>
+    <div class="stat-card" style="--accent-line:var(--green)"><div class="stat-label">Completed</div><div class="stat-value" id="dStat6">—</div><div class="stat-change">This quarter</div><div class="stat-icon" style="background:var(--green-bg)"><svg width="22" height="22" fill="none" stroke="var(--green)" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div></div>
+  </div>
+  <div class="grid-2-1 section-gap">
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Project Progress Overview</span>
+        <button class="btn btn-ghost btn-sm" onclick="showPage('projects')">View All →</button>
+      </div>
+      <div class="card-body" style="padding:14px 22px;">
+        <div id="dashProgressList" style="display:flex;flex-direction:column;gap:14px;"></div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Recent Activity</span></div>
+      <div class="card-body" style="padding:8px 22px;" id="dashActivity"></div>
+    </div>
+  </div>
+  <div class="grid-3 section-gap">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Low Stock Alerts</span><span class="badge badge-red" id="dashLowStockBadge">0 Items</span></div>
+      <div class="card-body" style="padding:0;" id="dashLowStock"></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Pending Approvals</span></div>
+      <div class="card-body" style="padding:0;" id="dashPendingApprovals"></div>
+    </div>
+    <div class="card">
+      <div class="card-header"><span class="card-title">Equipment Status</span></div>
+      <div class="card-body" style="padding:14px 22px;" id="dashEquipStatus"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PROJECTS ═══ -->
+<div class="page" id="page-projects">
+  <div class="page-header">
+    <div><h1 class="page-title">Projects</h1><p class="page-subtitle">Manage all construction projects</p></div>
+    <div class="page-actions">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" id="projectSearch" placeholder="Search projects…" style="width:220px;padding:8px 12px;font-size:13px;" oninput="renderProjectsPage()"/>
+        <select id="projectFilter" style="width:160px;padding:8px 12px;font-size:13px;" onchange="renderProjectsPage()">
+          <option value="">All Status</option>
+          <option value="Ongoing">Ongoing</option>
+          <option value="Delayed">Delayed</option>
+          <option value="Completed">Completed</option>
+          <option value="On Hold">On Hold</option>
+        </select>
+      </div>
+      <button class="btn btn-primary" onclick="openModal('addProjectModal')">
+        <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add Project
+      </button>
+    </div>
+  </div>
+  <div class="tabs">
+    <button class="tab-btn active" onclick="switchProjectView('cards',this)">Cards</button>
+    <button class="tab-btn" onclick="switchProjectView('table',this)">Table</button>
+  </div>
+  <div id="projectCardsView"></div>
+  <div id="projectTableView" style="display:none;">
+    <div class="card"><div class="table-wrap"><table><thead><tr><th>Project</th><th>Location</th><th>Status</th><th>Progress</th><th>Team</th><th>Contract</th><th>Actions</th></tr></thead><tbody id="projectTableBody"></tbody></table></div></div>
+  </div>
+</div>
+
+<!-- ═══ SCHEDULING ═══ -->
+<div class="page" id="page-scheduling">
+  <div class="page-header">
+    <div><h1 class="page-title">Scheduling</h1><p class="page-subtitle">Project timelines and Gantt chart view</p></div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('addMilestoneModal')">+ Add Milestone</button>
+  </div>
+  <div class="card section-gap">
+    <div class="card-header">
+      <span class="card-title">Project Timeline – Gantt View</span>
+      <select id="ganttProjectFilter" style="width:220px;padding:7px 12px;font-size:13px;border-radius:7px;border:1.5px solid var(--gray-200);" onchange="renderGantt()">
+        <option value="">All Projects</option>
+      </select>
+    </div>
+    <div class="card-body">
+      <div style="display:flex;align-items:center;gap:0;margin-bottom:12px;padding-left:180px;">
+        <div style="flex:1;display:flex;justify-content:space-between;font-size:11px;color:var(--gray-400);padding:0 4px;" id="ganttMonthLabels"></div>
+      </div>
+      <div id="ganttChart"></div>
+    </div>
+  </div>
+  <div class="card section-gap">
+    <div class="card-header"><span class="card-title">Milestones</span></div>
+    <div class="table-wrap"><table><thead><tr><th>Project</th><th>Milestone</th><th>Target Date</th><th>Status</th><th>Actions</th></tr></thead><tbody id="milestonesTableBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ═══ DAILY REPORTS ═══ -->
+<div class="page" id="page-dailyreports">
+  <div class="page-header">
+    <div><h1 class="page-title">Daily Site Reports</h1><p class="page-subtitle">Submit and view all site engineer daily reports</p></div>
+    <button class="btn btn-primary" onclick="showReportForm()">
+      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Submit Report
+    </button>
+  </div>
+  <div class="grid-2 section-gap">
+    <div class="card" id="reportFormCard">
+      <div class="card-header"><span class="card-title">Submit Daily Report</span></div>
+      <div class="card-body">
+        <div class="form-row">
+          <div class="form-group"><label>Date *</label><input type="date" id="rptDate"/></div>
+          <div class="form-group"><label>Project *</label><select id="rptProject"></select></div>
+        </div>
+        <div class="form-row">
+          <div class="form-group"><label>Weather</label>
+            <select id="rptWeather">
+              <option>☀️ Sunny</option><option>🌤️ Partly Cloudy</option><option>🌧️ Rainy</option><option>⛈️ Stormy</option><option>☁️ Cloudy</option>
+            </select>
+          </div>
+          <div class="form-group"><label>Engineer on Duty *</label><input type="text" id="rptEngineer" placeholder="Engr. Name"/></div>
+        </div>
+        <div class="form-group"><label>Work Accomplished Today *</label><textarea id="rptWork" placeholder="Describe the work completed today…"></textarea></div>
+        <div class="form-group"><label>Issues / Concerns</label><textarea id="rptIssues" placeholder="Any issues, delays, or safety concerns…" style="min-height:70px"></textarea></div>
+        <div class="form-group"><label>Workers Present</label><input type="number" id="rptWorkers" placeholder="0" min="0"/></div>
+        <button class="btn btn-primary" style="width:100%" onclick="submitDailyReport()">Submit Report</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Reports Log</span>
+        <div style="display:flex;gap:6px;align-items:center;">
+          <select id="rptFilterProject" style="padding:6px 10px;font-size:12px;border-radius:7px;border:1.5px solid var(--gray-200);" onchange="renderReportsTable()">
+            <option value="">All Projects</option>
+          </select>
+          <span class="badge badge-blue" id="reportsCountBadge">0</span>
+        </div>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>Date</th><th>Project</th><th>Engineer</th><th>Workers</th><th>Status</th><th></th></tr></thead><tbody id="reportsTableBody"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ MATERIAL REQUESTS ═══ -->
+<div class="page" id="page-material">
+  <div class="page-header">
+    <div><h1 class="page-title">Material Requests</h1><p class="page-subtitle">Submit and track material procurement requests</p></div>
+  </div>
+  <div class="grid-2 section-gap">
+    <div class="card">
+      <div class="card-header"><span class="card-title">New Material Request</span></div>
+      <div class="card-body">
+        <div class="form-group"><label>Project *</label><select id="mrProject"></select></div>
+        <div class="form-group"><label>Material Name *</label><input type="text" id="mrMaterial" placeholder="e.g. Portland Cement Type I"/></div>
+        <div class="form-row">
+          <div class="form-group"><label>Quantity *</label><input type="number" id="mrQty" placeholder="0" min="1"/></div>
+          <div class="form-group"><label>Unit</label>
+            <select id="mrUnit"><option>Bags</option><option>Pieces</option><option>Meters</option><option>Cubic Meters</option><option>Kilograms</option><option>Liters</option><option>Sheets</option><option>Sets</option></select>
+          </div>
+        </div>
+        <div class="form-group"><label>Purpose / Remarks</label><textarea id="mrPurpose" placeholder="Why is this material needed?" style="min-height:70px"></textarea></div>
+        <div class="form-group"><label>Requested By *</label><input type="text" id="mrBy" placeholder="Engr. Name"/></div>
+        <div class="form-group"><label>Date Needed</label><input type="date" id="mrDateNeeded"/></div>
+        <button class="btn btn-primary" style="width:100%" onclick="submitMaterialRequest()">Submit Request</button>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header">
+        <span class="card-title">Request Tracker</span>
+        <div style="display:flex;gap:6px;">
+          <select id="mrFilterStatus" style="padding:6px 10px;font-size:12px;border-radius:7px;border:1.5px solid var(--gray-200);" onchange="renderMaterialTable()">
+            <option value="">All Status</option>
+            <option value="Pending">Pending</option>
+            <option value="Approved">Approved</option>
+            <option value="Rejected">Rejected</option>
+            <option value="Delivered">Delivered</option>
+          </select>
+        </div>
+      </div>
+      <div class="table-wrap"><table><thead><tr><th>Ref #</th><th>Material</th><th>Qty</th><th>Project</th><th>Status</th><th>Action</th></tr></thead><tbody id="materialTableBody"></tbody></table></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ INVENTORY ═══ -->
+<div class="page" id="page-inventory">
+  <div class="page-header">
+    <div><h1 class="page-title">Inventory Management</h1><p class="page-subtitle">Track material stocks and low-stock alerts</p></div>
+    <div class="page-actions">
+      <input type="text" id="invSearch" placeholder="Search materials…" style="width:200px;padding:8px 12px;font-size:13px;" oninput="renderInventoryTable()"/>
+      <button class="btn btn-primary btn-sm" onclick="openModal('addInventoryModal')">+ Add Material</button>
+    </div>
+  </div>
+  <div class="card section-gap">
+    <div class="card-header">
+      <span class="card-title">Stock Summary</span>
+      <span class="badge badge-red" id="invLowStockBadge">0 Low Stock</span>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Material</th><th>Category</th><th>Unit</th><th>In Stock</th><th>Min Level</th><th>Status</th><th>Last Updated</th><th>Actions</th></tr></thead><tbody id="inventoryTableBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ═══ PAYROLL ═══ -->
+<div class="page" id="page-payroll">
+  <div class="page-header">
+    <div><h1 class="page-title">Payroll & Attendance</h1><p class="page-subtitle">Manage worker attendance and salary computation</p></div>
+    <div class="page-actions">
+      <button class="btn btn-outline btn-sm" onclick="exportPayrollCSV()">📥 Export CSV</button>
+      <button class="btn btn-primary btn-sm" onclick="openModal('addWorkerModal')">+ Add Worker</button>
+    </div>
+  </div>
+  <div class="stat-grid" style="grid-template-columns:repeat(4,1fr)" id="payrollStats"></div>
+  <div class="card section-gap">
+    <div class="card-header">
+      <span class="card-title" id="payrollWeekTitle">Weekly Payroll</span>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <select id="payrollProjectFilter" style="padding:6px 10px;font-size:12px;border-radius:7px;border:1.5px solid var(--gray-200);" onchange="renderPayrollTable()">
+          <option value="">All Projects</option>
+        </select>
+        <button class="btn btn-ghost btn-sm" onclick="printPayroll()">🖨️ Print</button>
+      </div>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Employee</th><th>Role</th><th>Project</th><th>Days Present</th><th>OT Hours</th><th>Daily Rate (₱)</th><th>OT Pay (₱)</th><th>Total Pay (₱)</th><th>Status</th><th>Actions</th></tr></thead><tbody id="payrollTableBody"></tbody></table></div>
+  </div>
+  <div class="card section-gap">
+    <div class="card-header"><span class="card-title">Add Attendance Record</span></div>
+    <div class="card-body">
+      <div class="form-row-3">
+        <div class="form-group"><label>Employee</label><select id="attEmp"></select></div>
+        <div class="form-group"><label>Days Present (this week)</label><input type="number" id="attDays" min="0" max="7" placeholder="0–7"/></div>
+        <div class="form-group"><label>OT Hours</label><input type="number" id="attOT" min="0" placeholder="0"/></div>
+      </div>
+      <button class="btn btn-primary btn-sm" onclick="saveAttendance()">Save Attendance</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ EQUIPMENT ═══ -->
+<div class="page" id="page-equipment">
+  <div class="page-header">
+    <div><h1 class="page-title">Equipment Management</h1><p class="page-subtitle">Track usage, location, and maintenance schedules</p></div>
+    <div class="page-actions">
+      <select id="equipFilter" style="padding:8px 12px;font-size:13px;border-radius:8px;border:1.5px solid var(--gray-200);" onchange="renderEquipmentGrid()">
+        <option value="">All Status</option>
+        <option value="Available">Available</option>
+        <option value="In Use">In Use</option>
+        <option value="Maintenance">Maintenance</option>
+      </select>
+      <button class="btn btn-primary btn-sm" onclick="openModal('addEquipModal')">+ Add Equipment</button>
+    </div>
+  </div>
+  <div class="stat-grid" style="grid-template-columns:repeat(4,1fr)" id="equipStats"></div>
+  <div class="equip-grid section-gap" id="equipmentGrid"></div>
+</div>
+
+<!-- ═══ COST / BOQ ═══ -->
+<div class="page" id="page-boq">
+  <div class="page-header">
+    <div><h1 class="page-title">Cost Estimation & BOQ</h1><p class="page-subtitle">Bill of Quantities and budget tracking</p></div>
+    <div class="page-actions">
+      <select id="boqProject" style="padding:8px 12px;font-size:13px;border-radius:8px;border:1.5px solid var(--gray-200);" onchange="renderBOQ()">
+        <option value="">Select Project…</option>
+      </select>
+      <button class="btn btn-primary btn-sm" onclick="openModal('addBOQModal')">+ Add Item</button>
+    </div>
+  </div>
+  <div class="grid-2-1 section-gap">
+    <div class="card">
+      <div class="card-header"><span class="card-title">Bill of Quantities</span><span class="badge badge-blue" id="boqProjectBadge">No project selected</span></div>
+      <div class="table-wrap"><table><thead><tr><th>#</th><th>Description</th><th>Unit</th><th>Qty</th><th>Unit Cost (₱)</th><th>Amount (₱)</th><th>Actions</th></tr></thead><tbody id="boqTableBody"></tbody></table></div>
+      <div style="padding:14px 22px;border-top:1px solid var(--gray-100);text-align:right;font-family:'Syne',sans-serif;font-size:15px;font-weight:700;">Total: <span id="boqTotal" style="color:var(--accent);">₱0.00</span></div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:18px;">
+      <div class="card">
+        <div class="card-header"><span class="card-title">Budget Summary</span></div>
+        <div class="card-body" id="boqSummary" style="padding:14px 22px;">
+          <div style="text-align:center;color:var(--gray-400);padding:24px 0;font-size:13px;">Select a project to view budget summary.</div>
+        </div>
+      </div>
+      <div class="card">
+        <div class="card-header"><span class="card-title">Cost Breakdown</span></div>
+        <div class="card-body" style="padding:14px 22px;" id="costBreakdown">
+          <div class="cost-bars" id="costBars"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ DOCUMENTS ═══ -->
+<div class="page" id="page-documents">
+  <div class="page-header">
+    <div><h1 class="page-title">Documents</h1><p class="page-subtitle">Centralized file management for all project documents</p></div>
+    <div class="page-actions">
+      <input type="text" id="docSearch" placeholder="Search documents…" style="width:200px;padding:8px 12px;font-size:13px;" oninput="renderDocuments()"/>
+      <button class="btn btn-primary btn-sm" onclick="openModal('uploadDocModal')">+ Upload Document</button>
+    </div>
+  </div>
+  <div class="grid-3 section-gap" id="docFolders">
+    <!-- Folders rendered by JS -->
+  </div>
+  <div class="card section-gap">
+    <div class="card-header">
+      <span class="card-title" id="docListTitle">All Documents</span>
+      <select id="docFilterFolder" style="padding:6px 10px;font-size:12px;border-radius:7px;border:1.5px solid var(--gray-200);" onchange="renderDocuments()">
+        <option value="">All Folders</option>
+        <option value="Drawings">Drawings & Plans</option>
+        <option value="Contracts">Contracts & MOA</option>
+        <option value="Reports">Project Reports</option>
+        <option value="Permits">Permits & Clearances</option>
+        <option value="Invoices">Invoices & OR</option>
+      </select>
+    </div>
+    <div class="table-wrap"><table><thead><tr><th>Document Name</th><th>Folder</th><th>Project</th><th>Uploaded By</th><th>Date</th><th>Actions</th></tr></thead><tbody id="docTableBody"></tbody></table></div>
+  </div>
+</div>
+
+<!-- ═══ REPORTS ═══ -->
+<div class="page" id="page-reports">
+  <div class="page-header">
+    <div><h1 class="page-title">Reports & Analytics</h1><p class="page-subtitle">Generate and export summary reports</p></div>
+  </div>
+  <div class="grid-3 section-gap">
+    <div class="card" style="cursor:pointer;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="card-body" style="text-align:center;padding:32px 20px">
+        <div style="width:54px;height:54px;border-radius:12px;background:var(--blue-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px">📊</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">Project Progress Report</div>
+        <div style="font-size:12px;color:var(--gray-400);margin:6px 0 16px">Overview of all project statuses</div>
+        <button class="btn btn-primary btn-sm" style="width:100%" onclick="generateReport('projects')">Generate Report</button>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="card-body" style="text-align:center;padding:32px 20px">
+        <div style="width:54px;height:54px;border-radius:12px;background:var(--green-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px">💰</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">Cost & Expense Report</div>
+        <div style="font-size:12px;color:var(--gray-400);margin:6px 0 16px">Budget vs. actual cost summary</div>
+        <button class="btn btn-primary btn-sm" style="width:100%" onclick="generateReport('cost')">Generate Report</button>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="card-body" style="text-align:center;padding:32px 20px">
+        <div style="width:54px;height:54px;border-radius:12px;background:var(--yellow-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px">👷</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">Labor & Payroll Report</div>
+        <div style="font-size:12px;color:var(--gray-400);margin:6px 0 16px">Manpower and salary summary</div>
+        <button class="btn btn-primary btn-sm" style="width:100%" onclick="generateReport('payroll')">Generate Report</button>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="card-body" style="text-align:center;padding:32px 20px">
+        <div style="width:54px;height:54px;border-radius:12px;background:var(--red-bg);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px">📦</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">Inventory & Materials</div>
+        <div style="font-size:12px;color:var(--gray-400);margin:6px 0 16px">Stock levels and usage report</div>
+        <button class="btn btn-primary btn-sm" style="width:100%" onclick="generateReport('inventory')">Generate Report</button>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="card-body" style="text-align:center;padding:32px 20px">
+        <div style="width:54px;height:54px;border-radius:12px;background:var(--accent-glow);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px">🚜</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">Equipment Utilization</div>
+        <div style="font-size:12px;color:var(--gray-400);margin:6px 0 16px">Usage and maintenance records</div>
+        <button class="btn btn-primary btn-sm" style="width:100%" onclick="generateReport('equipment')">Generate Report</button>
+      </div>
+    </div>
+    <div class="card" style="cursor:pointer;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='';this.style.boxShadow=''">
+      <div class="card-body" style="text-align:center;padding:32px 20px">
+        <div style="width:54px;height:54px;border-radius:12px;background:rgba(147,51,234,0.12);display:flex;align-items:center;justify-content:center;margin:0 auto 14px;font-size:24px">📋</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:15px">Daily Site Reports</div>
+        <div style="font-size:12px;color:var(--gray-400);margin:6px 0 16px">Compiled engineer daily reports</div>
+        <button class="btn btn-primary btn-sm" style="width:100%" onclick="generateReport('dailyreports')">Generate Report</button>
+      </div>
+    </div>
+  </div>
+  <div class="card section-gap" id="reportOutputCard" style="display:none;">
+    <div class="card-header">
+      <span class="card-title" id="reportOutputTitle">Report</span>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-outline btn-sm" onclick="printReport()">🖨️ Print</button>
+        <button class="btn btn-ghost btn-sm" onclick="document.getElementById('reportOutputCard').style.display='none'">✕ Close</button>
+      </div>
+    </div>
+    <div class="card-body" id="reportOutputBody"></div>
+  </div>
+</div>
+
+<!-- ═══ USER MANAGEMENT ═══ -->
+<div class="page" id="page-users">
+  <div class="page-header">
+    <div><h1 class="page-title">User Management</h1><p class="page-subtitle">Manage system users and role-based access control</p></div>
+    <button class="btn btn-primary btn-sm" onclick="openModal('addUserModal')">+ Add User</button>
+  </div>
+  <div class="card section-gap">
+    <div class="card-header"><span class="card-title">System Users</span><span class="badge badge-blue" id="usersCountBadge">0 Active Users</span></div>
+    <div class="table-wrap"><table><thead><tr><th>User</th><th>Role</th><th>Email</th><th>Last Login</th><th>Status</th><th>Actions</th></tr></thead><tbody id="usersTableBody"></tbody></table></div>
+  </div>
+  <div class="card section-gap">
+    <div class="card-header"><span class="card-title">Role Permissions Matrix</span></div>
+    <div class="table-wrap"><table>
+      <thead><tr><th>Module</th><th style="text-align:center">Admin</th><th style="text-align:center">Engineer</th><th style="text-align:center">Accountant</th><th style="text-align:center">Staff</th></tr></thead>
+      <tbody>
+        <tr><td>Dashboard</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td></tr>
+        <tr><td>Projects (Edit)</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">👁️</td><td style="text-align:center">❌</td></tr>
+        <tr><td>Daily Reports</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">👁️</td><td style="text-align:center">❌</td></tr>
+        <tr><td>Material Requests</td><td style="text-align:center">✅</td><td style="text-align:center">✅</td><td style="text-align:center">👁️</td><td style="text-align:center">Submit</td></tr>
+        <tr><td>Payroll</td><td style="text-align:center">✅</td><td style="text-align:center">❌</td><td style="text-align:center">✅</td><td style="text-align:center">❌</td></tr>
+        <tr><td>Cost & BOQ</td><td style="text-align:center">✅</td><td style="text-align:center">👁️</td><td style="text-align:center">✅</td><td style="text-align:center">❌</td></tr>
+        <tr><td>User Management</td><td style="text-align:center">✅</td><td style="text-align:center">❌</td><td style="text-align:center">❌</td><td style="text-align:center">❌</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+</main><!-- /main -->
+
+<!-- ══════════════ MODALS ══════════════ -->
+
+<!-- Add/Edit Project Modal -->
+<div class="modal-overlay" id="addProjectModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="projectModalTitle">Add New Project</span><button class="btn btn-ghost btn-sm" onclick="closeModal('addProjectModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="editProjectId"/>
+      <div class="form-group"><label>Project Name *</label><input type="text" id="projName" placeholder="e.g. Batangas City Commercial Building"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Location *</label><input type="text" id="projLocation" placeholder="City, Province"/></div>
+        <div class="form-group"><label>Project Type</label>
+          <select id="projType"><option>Residential</option><option>Commercial</option><option>Infrastructure</option><option>Institutional</option><option>Industrial</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Start Date *</label><input type="date" id="projStart"/></div>
+        <div class="form-group"><label>Target End Date *</label><input type="date" id="projEnd"/></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Contract Amount (₱)</label><input type="number" id="projContract" placeholder="0.00" min="0"/></div>
+        <div class="form-group"><label>Status</label>
+          <select id="projStatus"><option>Ongoing</option><option>Delayed</option><option>On Hold</option><option>Completed</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Progress (%)</label><input type="number" id="projProgress" placeholder="0" min="0" max="100"/></div>
+        <div class="form-group"><label>Project Engineer</label>
+          <select id="projEngineer"></select>
+        </div>
+      </div>
+      <div class="form-group"><label>Scope of Work</label><textarea id="projScope" placeholder="Brief description of project scope…"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('addProjectModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveProject()">Save Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- View Project Modal -->
+<div class="modal-overlay" id="viewProjectModal">
+  <div class="modal modal-lg">
+    <div class="modal-header"><span class="modal-title" id="viewProjTitle">Project Details</span><button class="btn btn-ghost btn-sm" onclick="closeModal('viewProjectModal')">✕</button></div>
+    <div class="modal-body" id="viewProjectBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('viewProjectModal')">Close</button>
+      <button class="btn btn-primary" id="viewProjEditBtn">Edit Project</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Milestone Modal -->
+<div class="modal-overlay" id="addMilestoneModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">Add Milestone</span><button class="btn btn-ghost btn-sm" onclick="closeModal('addMilestoneModal')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Project *</label><select id="msProject"></select></div>
+      <div class="form-group"><label>Milestone Name *</label><input type="text" id="msName" placeholder="e.g. Foundation Complete"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Target Date *</label><input type="date" id="msDate"/></div>
+        <div class="form-group"><label>Status</label>
+          <select id="msStatus"><option>Pending</option><option>In Progress</option><option>Completed</option><option>Delayed</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label>Notes</label><textarea id="msNotes" placeholder="Additional details…" style="min-height:70px"></textarea></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('addMilestoneModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveMilestone()">Save Milestone</button>
+    </div>
+  </div>
+</div>
+
+<!-- View Report Modal -->
+<div class="modal-overlay" id="viewReportModal">
+  <div class="modal modal-lg">
+    <div class="modal-header"><span class="modal-title">Daily Report Details</span><button class="btn btn-ghost btn-sm" onclick="closeModal('viewReportModal')">✕</button></div>
+    <div class="modal-body" id="viewReportBody"></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('viewReportModal')">Close</button></div>
+  </div>
+</div>
+
+<!-- View Material Request Modal -->
+<div class="modal-overlay" id="viewMRModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">Material Request Details</span><button class="btn btn-ghost btn-sm" onclick="closeModal('viewMRModal')">✕</button></div>
+    <div class="modal-body" id="viewMRBody"></div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('viewMRModal')">Close</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Inventory Modal -->
+<div class="modal-overlay" id="addInventoryModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="invModalTitle">Add Material to Inventory</span><button class="btn btn-ghost btn-sm" onclick="closeModal('addInventoryModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="editInvId"/>
+      <div class="form-group"><label>Material Name *</label><input type="text" id="invName" placeholder="e.g. Portland Cement Type I"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Category *</label>
+          <select id="invCategory"><option>Cement</option><option>Steel</option><option>Masonry</option><option>Aggregate</option><option>Plumbing</option><option>Lumber</option><option>Electrical</option><option>Finishing</option><option>Other</option></select>
+        </div>
+        <div class="form-group"><label>Unit *</label>
+          <select id="invUnit"><option>Bags</option><option>Pieces</option><option>Meters</option><option>Cu.m</option><option>Kilograms</option><option>Liters</option><option>Sheets</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>In Stock *</label><input type="number" id="invStock" placeholder="0" min="0"/></div>
+        <div class="form-group"><label>Minimum Level *</label><input type="number" id="invMin" placeholder="0" min="0"/></div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('addInventoryModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveInventoryItem()">Save</button>
+    </div>
+  </div>
+</div>
+
+<!-- Restock Modal -->
+<div class="modal-overlay" id="restockModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">Restock Material</span><button class="btn btn-ghost btn-sm" onclick="closeModal('restockModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="restockId"/>
+      <div class="form-group"><label>Material</label><input type="text" id="restockName" readonly style="background:var(--gray-50);"/></div>
+      <div class="form-group"><label>Quantity to Add *</label><input type="number" id="restockQty" placeholder="0" min="1"/></div>
+      <div class="form-group"><label>Supplier / Notes</label><input type="text" id="restockNotes" placeholder="Supplier name or delivery notes"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('restockModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveRestock()">Confirm Restock</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Worker Modal -->
+<div class="modal-overlay" id="addWorkerModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="workerModalTitle">Add Worker</span><button class="btn btn-ghost btn-sm" onclick="closeModal('addWorkerModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="editWorkerId"/>
+      <div class="form-row">
+        <div class="form-group"><label>Full Name *</label><input type="text" id="wkName" placeholder="Arabella Manao"/></div>
+        <div class="form-group"><label>Role *</label>
+          <select id="wkRole"><option>Foreman</option><option>Engineer</option><option>Carpenter</option><option>Mason</option><option>Welder</option><option>Electrician</option><option>Plumber</option><option>Laborer</option><option>Driver</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Daily Rate (₱) *</label><input type="number" id="wkRate" placeholder="0" min="0"/></div>
+        <div class="form-group"><label>Assigned Project</label><select id="wkProject"></select></div>
+      </div>
+      <div class="form-group"><label>Status</label>
+        <select id="wkStatus"><option>Active</option><option>On Leave</option><option>Inactive</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('addWorkerModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveWorker()">Save Worker</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add Equipment Modal -->
+<div class="modal-overlay" id="addEquipModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="equipModalTitle">Add Equipment</span><button class="btn btn-ghost btn-sm" onclick="closeModal('addEquipModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="editEquipId"/>
+      <div class="form-group"><label>Equipment Name *</label><input type="text" id="eqName" placeholder="e.g. Backhoe Loader BH-004"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Model / Specs</label><input type="text" id="eqModel" placeholder="e.g. Cat 320"/></div>
+        <div class="form-group"><label>Type / Icon</label>
+          <select id="eqIcon"><option value="🚜">🚜 Backhoe / Excavator</option><option value="🏗️">🏗️ Crane</option><option value="🚛">🚛 Dump Truck</option><option value="⚙️">⚙️ Mixer / Machine</option><option value="🔩">🔩 Compactor</option><option value="🔧">🔧 Generator</option><option value="🚧">🚧 Other</option></select>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Status</label>
+          <select id="eqStatus"><option>Available</option><option>In Use</option><option>Maintenance</option></select>
+        </div>
+        <div class="form-group"><label>Assigned Project</label><select id="eqProject"><option value="">None (Yard)</option></select></div>
+      </div>
+      <div class="form-group"><label>Next Maintenance Date</label><input type="date" id="eqMaintDate"/></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('addEquipModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveEquipment()">Save Equipment</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add BOQ Item Modal -->
+<div class="modal-overlay" id="addBOQModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="boqModalTitle">Add BOQ Item</span><button class="btn btn-ghost btn-sm" onclick="closeModal('addBOQModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="editBOQId"/>
+      <div class="form-group"><label>Description *</label><input type="text" id="boqDesc" placeholder="e.g. Concrete Formwork"/></div>
+      <div class="form-row-3">
+        <div class="form-group"><label>Unit</label><select id="boqUnit"><option>sq.m</option><option>cu.m</option><option>ln.m</option><option>kg</option><option>bag</option><option>pc</option><option>set</option><option>lot</option></select></div>
+        <div class="form-group"><label>Quantity *</label><input type="number" id="boqQty" placeholder="0" min="0" step="0.01"/></div>
+        <div class="form-group"><label>Unit Cost (₱) *</label><input type="number" id="boqUnitCost" placeholder="0.00" min="0" step="0.01"/></div>
+      </div>
+      <div class="form-group"><label>Category</label>
+        <select id="boqCat"><option>Labor</option><option>Materials</option><option>Equipment</option><option>Overhead</option><option>Other</option></select>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('addBOQModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveBOQItem()">Save Item</button>
+    </div>
+  </div>
+</div>
+
+<!-- Upload Document Modal -->
+<div class="modal-overlay" id="uploadDocModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title">Upload Document</span><button class="btn btn-ghost btn-sm" onclick="closeModal('uploadDocModal')">✕</button></div>
+    <div class="modal-body">
+      <div class="form-group"><label>Document Name *</label><input type="text" id="docName" placeholder="e.g. Structural Drawings Rev.3"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Folder</label>
+          <select id="docFolder"><option value="Drawings">Drawings & Plans</option><option value="Contracts">Contracts & MOA</option><option value="Reports">Project Reports</option><option value="Permits">Permits & Clearances</option><option value="Invoices">Invoices & OR</option></select>
+        </div>
+        <div class="form-group"><label>Project</label><select id="docProject"></select></div>
+      </div>
+      <div class="form-group"><label>File (simulated)</label>
+        <div class="upload-zone" id="docUploadZone" onclick="simulateUpload()">
+          📁 Click to select file (simulation)<br>
+          <span style="font-size:11px;color:var(--gray-400)" id="docFileLabel">PDF, DWG, DOCX up to 50MB</span>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('uploadDocModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveDocument()">Upload</button>
+    </div>
+  </div>
+</div>
+
+<!-- Add User Modal -->
+<div class="modal-overlay" id="addUserModal">
+  <div class="modal">
+    <div class="modal-header"><span class="modal-title" id="userModalTitle">Add User</span><button class="btn btn-ghost btn-sm" onclick="closeModal('addUserModal')">✕</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="editUserId"/>
+      <div class="form-row">
+        <div class="form-group"><label>Full Name *</label><input type="text" id="usrName" placeholder="Arabella Manao"/></div>
+        <div class="form-group"><label>Role *</label>
+          <select id="usrRole"><option>Admin</option><option>Engineer</option><option>Accountant</option><option>Staff</option></select>
+        </div>
+      </div>
+      <div class="form-group"><label>Email *</label><input type="email" id="usrEmail" placeholder="name@aventri.ph"/></div>
+      <div class="form-row">
+        <div class="form-group"><label>Password *</label><input type="password" id="usrPass" placeholder="••••••••"/></div>
+        <div class="form-group"><label>Status</label>
+          <select id="usrStatus"><option>Active</option><option>Inactive</option></select>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline" onclick="closeModal('addUserModal')">Cancel</button>
+      <button class="btn btn-primary" onclick="saveUser()">Save User</button>
+    </div>
+  </div>
+</div>
+
+<!-- Report Preview Modal -->
+<div class="modal-overlay" id="reportPreviewModal">
+  <div class="modal modal-lg">
+    <div class="modal-header"><span class="modal-title" id="rptPreviewTitle">Report Preview</span>
+      <div style="display:flex;gap:8px;"><button class="btn btn-outline btn-sm" onclick="printReport()">🖨️ Print</button><button class="btn btn-ghost btn-sm" onclick="closeModal('reportPreviewModal')">✕</button></div>
+    </div>
+    <div class="modal-body" id="rptPreviewBody" style="font-family:'DM Sans',sans-serif;"></div>
+    <div class="modal-footer"><button class="btn btn-outline" onclick="closeModal('reportPreviewModal')">Close</button></div>
+  </div>
+</div>
+
+<!-- Confirm Dialog -->
+<div class="confirm-overlay" id="confirmOverlay">
+  <div class="confirm-box">
+    <div class="confirm-title" id="confirmTitle">Confirm Action</div>
+    <div class="confirm-msg" id="confirmMsg">Are you sure?</div>
+    <div class="confirm-actions">
+      <button class="btn btn-outline" onclick="closeConfirm()">Cancel</button>
+      <button class="btn btn-danger" id="confirmOkBtn" onclick="confirmOk()">Confirm</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast Container -->
+<div class="toast-container" id="toastContainer"></div>
+
+<!-- ════════════════════ JAVASCRIPT ════════════════════ -->
+<script>
+// ═══════════════ STATE / DATA STORE ═══════════════
+const DB = {
+  projects: [
+    {id:'PRJ-001',name:'Lipa City Residential Complex',location:'Lipa City, Batangas',type:'Residential',start:'2024-08-01',end:'2025-08-31',contract:45000000,status:'Ongoing',progress:68,engineer:'Jaymee Mara',scope:'6-storey residential building with 48 units.',team:['JM','HC']},
+    {id:'PRJ-002',name:'Batangas City Mall Phase 2',location:'Batangas City',type:'Commercial',start:'2024-06-15',end:'2025-12-31',contract:120000000,status:'Delayed',progress:34,engineer:'Hazelle Castillo',scope:'Commercial mall expansion, Phase 2.',team:['HC','AE']},
+    {id:'PRJ-003',name:'SLEX Access Road Widening',location:'Santo Tomas, Batangas',type:'Infrastructure',start:'2024-09-01',end:'2025-07-15',contract:38000000,status:'Ongoing',progress:72,engineer:'Joshoa Perilla',scope:'4-lane road widening, 2.3km stretch.',team:['JP']},
+    {id:'PRJ-004',name:'Tanauan Municipal Hall',location:'Tanauan City, Batangas',type:'Institutional',start:'2024-11-01',end:'2025-11-30',contract:28000000,status:'Ongoing',progress:52,engineer:'Sophia Liwanag',scope:'New 3-storey municipal hall building.',team:['SL','CC']},
+    {id:'PRJ-005',name:'San Jose Industrial Warehouse',location:'San Jose, Batangas',type:'Industrial',start:'2025-01-15',end:'2025-09-30',contract:18500000,status:'Ongoing',progress:28,engineer:'Charlie Casabuena',scope:'Large-span industrial warehouse with loading docks.',team:['CC']},
+    {id:'PRJ-006',name:'Padre Garcia Barangay Hall',location:'Padre Garcia, Batangas',type:'Institutional',start:'2025-03-01',end:'2025-09-30',contract:3200000,status:'Ongoing',progress:45,engineer:'Gwyneth Castillo',scope:'2-storey barangay hall facility.',team:['GC','GR']},
+    {id:'PRJ-007',name:'Rosario Elementary School',location:'Rosario, Batangas',type:'Institutional',start:'2024-04-01',end:'2024-12-31',contract:5100000,status:'Completed',progress:100,engineer:'Aeron Estrada',scope:'4-classroom school building.',team:['AE']},
+    {id:'PRJ-008',name:'Calaca Bridge Rehabilitation',location:'Calaca, Batangas',type:'Infrastructure',start:'2025-02-01',end:'2025-08-31',contract:15000000,status:'Delayed',progress:18,engineer:'Gwyneth Rabano',scope:'Rehabilitation of 80m RC bridge.',team:['GR']},
+    {id:'PRJ-009',name:'Lemery Commercial Bldg',location:'Lemery, Batangas',type:'Commercial',start:'2025-04-01',end:'2026-03-31',contract:22000000,status:'Ongoing',progress:8,engineer:'Arabella Manao',scope:'5-storey commercial building.',team:['AR']},
+    {id:'PRJ-010',name:'Nasugbu Beach Resort',location:'Nasugbu, Batangas',type:'Commercial',start:'2025-04-15',end:'2026-06-30',contract:55000000,status:'On Hold',progress:0,engineer:'Arabella Manao',scope:'Beach resort complex with pool and amenities.',team:['AR']},
+  ],
+  milestones: [
+    {id:'MS-001',project:'PRJ-001',name:'Foundation Complete',date:'2024-11-30',status:'Completed',notes:'All pile caps and grade beams done.'},
+    {id:'MS-002',project:'PRJ-001',name:'3rd Floor Slab',date:'2025-03-15',status:'Completed',notes:''},
+    {id:'MS-003',project:'PRJ-001',name:'Roof Deck',date:'2025-06-30',status:'In Progress',notes:''},
+    {id:'MS-004',project:'PRJ-002',name:'Phase 2 Foundation',date:'2024-12-31',status:'Delayed',notes:'Delayed due to soil issues.'},
+    {id:'MS-005',project:'PRJ-003',name:'Earthworks Complete',date:'2025-02-28',status:'Completed',notes:''},
+    {id:'MS-006',project:'PRJ-004',name:'Structural Frame',date:'2025-08-31',status:'In Progress',notes:''},
+  ],
+  reports: [
+    {id:'RPT-001',date:'2025-04-27',project:'PRJ-001',engineer:'Engr. J. Dela Cruz',weather:'☀️ Sunny',work:'Completed formwork for 3rd floor columns.',issues:'Mild delay in concrete delivery.',workers:18,status:'Submitted'},
+    {id:'RPT-002',date:'2025-04-27',project:'PRJ-004',engineer:'Engr. M. Gonzales',weather:'🌤️ Partly Cloudy',work:'Steel erection for 2nd floor columns.',issues:'None.',workers:12,status:'Submitted'},
+    {id:'RPT-003',date:'2025-04-26',project:'PRJ-003',engineer:'Engr. A. Torres',weather:'☀️ Sunny',work:'Asphalt laying km 1.2-1.8.',issues:'Equipment breakdown for 2 hours.',workers:25,status:'Submitted'},
+    {id:'RPT-004',date:'2025-04-26',project:'PRJ-002',engineer:'Engr. M. Santos',weather:'🌧️ Rainy',work:'No work done due to rain.',issues:'Weather stoppage.',workers:0,status:'Under Review'},
+    {id:'RPT-005',date:'2025-04-25',project:'PRJ-005',engineer:'Engr. J. Reyes',weather:'☀️ Sunny',work:'Concrete pouring for floor slab.',issues:'None.',workers:22,status:'Submitted'},
+  ],
+  materialRequests: [
+    {id:'MR-045',material:'Rebars 16mm',qty:'200',unit:'pcs',project:'PRJ-001',by:'Engr. J. Dela Cruz',purpose:'Column reinforcement 3rd floor',dateNeeded:'2025-04-30',status:'Approved',date:'2025-04-25'},
+    {id:'MR-044',material:'Portland Cement Type I',qty:'50',unit:'Bags',project:'PRJ-003',by:'Engr. A. Torres',purpose:'Concrete mix for paving',dateNeeded:'2025-04-29',status:'Pending',date:'2025-04-26'},
+    {id:'MR-043',material:'CHB 4"',qty:'500',unit:'Pieces',project:'PRJ-004',by:'Engr. M. Gonzales',purpose:'Exterior walls 2nd floor',dateNeeded:'2025-05-02',status:'Pending',date:'2025-04-26'},
+    {id:'MR-042',material:'GI Pipes 2"',qty:'40',unit:'Pieces',project:'PRJ-002',by:'Engr. M. Santos',purpose:'Plumbing rough-in',dateNeeded:'2025-04-28',status:'Rejected',date:'2025-04-24'},
+    {id:'MR-041',material:'Sand (Fine)',qty:'10',unit:'Cubic Meters',project:'PRJ-005',by:'Engr. J. Reyes',purpose:'Floor slab base',dateNeeded:'2025-04-26',status:'Delivered',date:'2025-04-22'},
+    {id:'MR-040',material:'Gravel ¾"',qty:'8',unit:'Cubic Meters',project:'PRJ-001',by:'Engr. J. Dela Cruz',purpose:'Concrete aggregate',dateNeeded:'2025-04-24',status:'Delivered',date:'2025-04-20'},
+  ],
+  inventory: [
+    {id:'INV-001',name:'Portland Cement Type I',category:'Cement',unit:'Bags',stock:12,min:30,updated:'2025-04-27'},
+    {id:'INV-002',name:'Deformed Bar 16mm',category:'Steel',unit:'Pieces',stock:324,min:100,updated:'2025-04-25'},
+    {id:'INV-003',name:'Concrete Hollow Block 4"',category:'Masonry',unit:'Pieces',stock:48,min:200,updated:'2025-04-26'},
+    {id:'INV-004',name:'Sand (Fine, Washed)',category:'Aggregate',unit:'Cu.m',stock:22,min:10,updated:'2025-04-24'},
+    {id:'INV-005',name:'Gravel ¾" Crushed',category:'Aggregate',unit:'Cu.m',stock:18,min:8,updated:'2025-04-24'},
+    {id:'INV-006',name:'GI Pipe 2" Schedule 40',category:'Plumbing',unit:'Pieces',stock:56,min:20,updated:'2025-04-22'},
+    {id:'INV-007',name:'Plywood ¾" Marine',category:'Lumber',unit:'Sheets',stock:85,min:30,updated:'2025-04-20'},
+  ],
+  workers: [
+    {id:'WK-001',name:'Ricardo B. Santos',role:'Foreman',project:'PRJ-001',rate:950,days:6,ot:4,status:'Active'},
+    {id:'WK-002',name:'Mark D. Villanueva',role:'Carpenter',project:'PRJ-002',rate:750,days:5,ot:0,status:'Active'},
+    {id:'WK-003',name:'Jose M. Ocampo',role:'Mason',project:'PRJ-003',rate:800,days:6,ot:8,status:'Active'},
+    {id:'WK-004',name:'Lito R. Gregorio',role:'Welder',project:'PRJ-005',rate:900,days:4,ot:2,status:'Active'},
+    {id:'WK-005',name:'Ana P. Torres',role:'Engineer',project:'PRJ-004',rate:1500,days:6,ot:0,status:'Active'},
+    {id:'WK-006',name:'Carlo S. Mendoza',role:'Laborer',project:'PRJ-001',rate:600,days:5,ot:0,status:'Active'},
+    {id:'WK-007',name:'Ben P. Cruz',role:'Electrician',project:'PRJ-002',rate:850,days:5,ot:3,status:'Active'},
+    {id:'WK-008',name:'Roel T. Flores',role:'Plumber',project:'PRJ-003',rate:850,days:4,ot:0,status:'Active'},
+    {id:'WK-009',name:'Danny A. Ramos',role:'Driver',project:'PRJ-005',rate:700,days:6,ot:2,status:'On Leave'},
+    {id:'WK-010',name:'Elvie M. Santiago',role:'Laborer',project:'PRJ-006',rate:550,days:3,ot:0,status:'Active'},
+  ],
+  equipment: [
+    {id:'EQ-001',name:'Backhoe Loader BH-001',model:'Cat 320',icon:'🚜',status:'Available',project:'PRJ-001',maintDate:'2025-06-01'},
+    {id:'EQ-002',name:'Tower Crane TC-01',model:'Liebherr 110EC',icon:'🏗️',status:'In Use',project:'PRJ-002',maintDate:'2025-07-15'},
+    {id:'EQ-003',name:'Dump Truck DT-003',model:'Isuzu EXZ',icon:'🚛',status:'In Use',project:'PRJ-003',maintDate:'2025-05-20'},
+    {id:'EQ-004',name:'Concrete Mixer CM-02',model:'350L Capacity',icon:'⚙️',status:'Maintenance',project:'PRJ-005',maintDate:'2025-04-30'},
+    {id:'EQ-005',name:'Plate Compactor PC-01',model:'Mikasa MVC-88',icon:'🔩',status:'In Use',project:'PRJ-004',maintDate:'2025-08-01'},
+    {id:'EQ-006',name:'Backhoe Loader BH-003',model:'Komatsu PC200',icon:'🚜',status:'Maintenance',project:'',maintDate:'2025-05-02'},
+    {id:'EQ-007',name:'Dump Truck DT-005',model:'Isuzu FVZ',icon:'🚛',status:'Available',project:'',maintDate:'2025-06-15'},
+    {id:'EQ-008',name:'Generator Set GS-02',model:'25kVA Kohler',icon:'🔧',status:'In Use',project:'PRJ-001',maintDate:'2025-05-30'},
+    {id:'EQ-009',name:'Water Pump WP-01',model:'2" Submersible',icon:'🔧',status:'Available',project:'',maintDate:'2025-09-01'},
+    {id:'EQ-010',name:'Welding Machine WM-02',model:'Lincoln 300A',icon:'🔧',status:'In Use',project:'PRJ-003',maintDate:'2025-07-01'},
+  ],
+  boqItems: {
+    'PRJ-001':[
+      {id:'BOQ-001',desc:'Earthworks and Site Preparation',unit:'lot',qty:1,unitCost:450000,cat:'Labor'},
+      {id:'BOQ-002',desc:'Concrete Works (Foundation)',unit:'cu.m',qty:280,unitCost:12500,cat:'Materials'},
+      {id:'BOQ-003',desc:'Reinforcing Steel Bars',unit:'kg',qty:45000,unitCost:68,cat:'Materials'},
+      {id:'BOQ-004',desc:'Formworks and Scaffolding',unit:'sq.m',qty:1200,unitCost:850,cat:'Materials'},
+      {id:'BOQ-005',desc:'Masonry Works',unit:'sq.m',qty:2400,unitCost:650,cat:'Labor'},
+    ],
+    'PRJ-002':[
+      {id:'BOQ-006',desc:'Structural Steel Frame',unit:'kg',qty:280000,unitCost:85,cat:'Materials'},
+      {id:'BOQ-007',desc:'Concrete Works',unit:'cu.m',qty:1500,unitCost:12500,cat:'Materials'},
+      {id:'BOQ-008',desc:'Electrical Works (Main)',unit:'lot',qty:1,unitCost:8500000,cat:'Equipment'},
+    ],
+  },
+  documents: [
+    {id:'DOC-001',name:'Structural Drawings – Lipa Complex',folder:'Drawings',project:'PRJ-001',by:'J. Reyes',date:'2024-09-15',ext:'PDF'},
+    {id:'DOC-002',name:'Contract Agreement – Batangas Mall Ph2',folder:'Contracts',project:'PRJ-002',by:'J. Reyes',date:'2024-06-10',ext:'PDF'},
+    {id:'DOC-003',name:'Site Development Plan – SLEX',folder:'Drawings',project:'PRJ-003',by:'A. Torres',date:'2024-10-01',ext:'DWG'},
+    {id:'DOC-004',name:'Building Permit – Tanauan Municipal Hall',folder:'Permits',project:'PRJ-004',by:'J. Reyes',date:'2024-10-28',ext:'PDF'},
+    {id:'DOC-005',name:'Supplier Invoice #INV-2025-031',folder:'Invoices',project:'PRJ-001',by:'M. Santos',date:'2025-04-25',ext:'PDF'},
+    {id:'DOC-006',name:'April Progress Report – SLEX',folder:'Reports',project:'PRJ-003',by:'A. Torres',date:'2025-04-27',ext:'DOCX'},
+  ],
+  users: [
+    {id:'USR-001',name:'Arabella Manao',role:'Admin',email:'ara.manao@aventri.ph',lastLogin:'Apr 27, 2025 – 8:12 AM',status:'Active',initials:'AM',color:'var(--accent)'},
+    {id:'USR-002',name:'Jaymee Mara',role:'Engineer',email:'j.mara@aventri.ph',lastLogin:'Apr 27, 2025 – 7:45 AM',status:'Active',initials:'JM',color:'var(--blue)'},
+    {id:'USR-003',name:'Hazelle Castillo',role:'Accountant',email:'casel.castillo@aventri.ph',lastLogin:'Apr 26, 2025 – 5:00 PM',status:'Active',initials:'HC',color:'var(--green)'},
+    {id:'USR-004',name:'Charlie Casabuena',role:'Staff',email:'amae.casabuena@aventri.ph',lastLogin:'Apr 27, 2025 – 6:30 AM',status:'Active',initials:'CC',color:'var(--purple)'},
+    {id:'USR-005',name:'Gwyneth Castillo',role:'Engineer',email:'gwy.castillo@aventri.ph',lastLogin:'Apr 26, 2025 – 4:15 PM',status:'Active',initials:'GC',color:'var(--blue)'},
+    {id:'USR-006',name:'Joshoa Perilla',role:'Engineer',email:'j.perilla@aventri.ph',lastLogin:'Apr 25, 2025 – 3:00 PM',status:'Active',initials:'JP',color:'var(--green)'},
+    {id:'USR-007',name:'Sophia Liwanag',role:'Staff',email:'s.liwanag@aventri.ph',lastLogin:'Apr 20, 2025 – 9:00 AM',status:'Inactive',initials:'SL',color:'var(--gray-400)'},
+    {id:'USR-006',name:'Gwyneth Rabano',role:'Engineer',email:'gwy.rabano@aventri.ph',lastLogin:'Apr 25, 2025 – 4:00 PM',status:'Active',initials:'GR',color:'var(--green)'},
+    {id:'USR-007',name:'Aeron Estrada',role:'Staff',email:'v.estrada@aventri.ph',lastLogin:'Apr 20, 2025 – 7:00 AM',status:'Inactive',initials:'AE',color:'var(--gray-400)'},
+
+  ],
+  notifications: [
+    {id:'N-001',icon:'✅',bg:'var(--green-bg)',msg:'Material request <strong>MR-045</strong> approved by Engr. Santos',time:'5 minutes ago',read:false,page:'material'},
+    {id:'N-002',icon:'⚠️',bg:'var(--red-bg)',msg:'<strong>Low stock alert:</strong> Portland Cement – only 12 bags remaining',time:'1 hour ago',read:false,page:'inventory'},
+    {id:'N-003',icon:'📋',bg:'var(--blue-bg)',msg:'Daily report submitted by Engr. Dela Cruz for <strong>Lipa City Residential</strong>',time:'2 hours ago',read:false,page:'dailyreports'},
+    {id:'N-004',icon:'🚜',bg:'var(--yellow-bg)',msg:'Backhoe Loader BH-003 is due for maintenance on <strong>May 2, 2025</strong>',time:'Yesterday, 4:30 PM',read:true,page:'equipment'},
+    {id:'N-005',icon:'📅',bg:'var(--accent-glow)',msg:'Schedule update: <strong>Batangas City Mall Phase 2</strong> is now delayed by 3 days',time:'Yesterday, 2:00 PM',read:true,page:'scheduling'},
+    {id:'N-006',icon:'💰',bg:'var(--green-bg)',msg:'Payroll for Week 17 has been processed. 42 employees paid.',time:'Apr 24, 2025',read:true,page:'payroll'},
+  ],
+  activity: [],
+  _mrCounter: 46,
+  _rptCounter: 6,
+  _msCounter: 7,
+};
+
+// ═══════════════ UTILITY FUNCTIONS ═══════════════
+function fmtMoney(v){return'₱'+(+v).toLocaleString('en-PH',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtDate(d){if(!d)return'—';const dt=new Date(d+'T12:00:00');return dt.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'});}
+function today(){return new Date().toISOString().slice(0,10);}
+function initials(name){return name.split(' ').filter(Boolean).map(w=>w[0]).slice(0,2).join('').toUpperCase();}
+function colors(i){const c=['var(--accent)','var(--blue)','var(--green)','var(--purple)','#e91e63','#00bcd4'];return c[i%c.length];}
+function getStatusBadge(status){
+  const m={'Ongoing':'badge-green','Delayed':'badge-red','Completed':'badge-gray','On Hold':'badge-yellow','Pending':'badge-yellow','Approved':'badge-green','Rejected':'badge-red','Delivered':'badge-blue','Submitted':'badge-green','Under Review':'badge-yellow','In Progress':'badge-blue','Available':'badge-green','In Use':'badge-yellow','Maintenance':'badge-red','Active':'badge-green','Inactive':'badge-gray','On Leave':'badge-yellow','Paid':'badge-green'};
+  return m[status]||'badge-gray';
+}
+function getProjectName(id){const p=DB.projects.find(x=>x.id===id);return p?p.name:id;}
+
+// ═══════════════ TOAST ═══════════════
+function showToast(msg,type='',duration=3200){
+  const c=document.getElementById('toastContainer');
+  const t=document.createElement('div');
+  t.className='toast'+(type?' '+type:'');
+  t.innerHTML=`<span>${type==='success'?'✅':type==='error'?'❌':type==='warning'?'⚠️':'ℹ️'}</span><span>${msg}</span>`;
+  c.appendChild(t);
+  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateY(20px)';t.style.transition='all .3s';setTimeout(()=>t.remove(),300);},duration);
+}
+
+// ═══════════════ CONFIRM DIALOG ═══════════════
+let _confirmCb=null;
+function showConfirm(title,msg,okLabel,okClass,cb){
+  document.getElementById('confirmTitle').textContent=title;
+  document.getElementById('confirmMsg').textContent=msg;
+  const btn=document.getElementById('confirmOkBtn');
+  btn.textContent=okLabel||'Confirm';
+  btn.className='btn '+(okClass||'btn-danger');
+  _confirmCb=cb;
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+function confirmOk(){closeConfirm();if(_confirmCb)_confirmCb();}
+function closeConfirm(){document.getElementById('confirmOverlay').classList.remove('open');_confirmCb=null;}
+
+// ═══════════════ MODAL ═══════════════
+function openModal(id){document.getElementById(id).classList.add('open');}
+function closeModal(id){document.getElementById(id).classList.remove('open');}
+document.addEventListener('click',function(e){
+  if(e.target.classList.contains('modal-overlay'))e.target.classList.remove('open');
+  if(e.target===document.getElementById('confirmOverlay'))closeConfirm();
+});
+
+// ═══════════════ PAGE NAVIGATION ═══════════════
+function showPage(id){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  const pg=document.getElementById('page-'+id);
+  if(pg)pg.classList.add('active');
+  const nav=document.querySelector('[data-page="'+id+'"]');
+  if(nav)nav.classList.add('active');
+  document.getElementById('notifPanel').classList.remove('open');
+  // Trigger render for each page
+  const renders={dashboard:renderDashboard,projects:renderProjectsPage,scheduling:renderSchedulingPage,dailyreports:renderReportsPage,material:renderMaterialPage,inventory:renderInventoryPage,payroll:renderPayrollPage,equipment:renderEquipmentPage,boq:renderBOQPage,documents:renderDocumentsPage,reports:()=>{},users:renderUsersPage};
+  if(renders[id])renders[id]();
+}
+
+// ═══════════════ ACTIVITY LOG ═══════════════
+function addActivity(icon,bg,text){
+  DB.activity.unshift({icon,bg,text,time:new Date().toLocaleTimeString('en-PH',{hour:'2-digit',minute:'2-digit'})});
+  if(DB.activity.length>20)DB.activity.pop();
+}
+function addNotification(icon,bg,msg,page){
+  DB.notifications.unshift({id:'N-'+Date.now(),icon,bg,msg,time:'Just now',read:false,page});
+  renderNotifications();
+  updateNotifBadge();
+}
+
+// ═══════════════ NOTIFICATIONS ═══════════════
+function toggleNotif(){document.getElementById('notifPanel').classList.toggle('open');}
+function renderNotifications(){
+  const list=document.getElementById('notifList');
+  list.innerHTML=DB.notifications.map(n=>`
+    <div class="notif-item${n.read?'':' notif-unread'}" onclick="notifClick('${n.id}','${n.page}')">
+      <div class="notif-icon" style="background:${n.bg}">${n.icon}</div>
+      <div class="notif-content">
+        <div class="notif-msg">${n.msg}</div>
+        <div class="notif-time">${n.time}</div>
+      </div>
+    </div>`).join('');
+}
+function notifClick(id,page){
+  const n=DB.notifications.find(x=>x.id===id);
+  if(n)n.read=true;
+  updateNotifBadge();
+  renderNotifications();
+  if(page)showPage(page);
+  document.getElementById('notifPanel').classList.remove('open');
+}
+function markAllRead(){
+  DB.notifications.forEach(n=>n.read=true);
+  updateNotifBadge();
+  renderNotifications();
+}
+function updateNotifBadge(){
+  const unread=DB.notifications.filter(n=>!n.read).length;
+  const dot=document.getElementById('notifDot');
+  dot.style.display=unread>0?'':'none';
+}
+
+// ═══════════════ GLOBAL SEARCH ═══════════════
+const searchIndex=[];
+function buildSearchIndex(){
+  searchIndex.length=0;
+  DB.projects.forEach(p=>searchIndex.push({label:p.name+' · '+p.location,sub:p.status,tag:'Project',tagClass:'badge-blue',action:()=>{showPage('projects');setTimeout(()=>viewProject(p.id),300);}}));
+  DB.materialRequests.forEach(m=>searchIndex.push({label:m.id+' – '+m.material,sub:m.status,tag:'Material Req',tagClass:'badge-yellow',action:()=>showPage('material')}));
+  DB.inventory.forEach(i=>searchIndex.push({label:i.name,sub:i.category,tag:'Inventory',tagClass:'badge-green',action:()=>showPage('inventory')}));
+  DB.workers.forEach(w=>searchIndex.push({label:w.name,sub:w.role,tag:'Worker',tagClass:'badge-gray',action:()=>showPage('payroll')}));
+  DB.equipment.forEach(e=>searchIndex.push({label:e.name,sub:e.status,tag:'Equipment',tagClass:getStatusBadge(e.status),action:()=>showPage('equipment')}));
+  DB.reports.forEach(r=>searchIndex.push({label:'Report '+r.id+' – '+getProjectName(r.project),sub:r.date,tag:'Report',tagClass:'badge-purple',action:()=>showPage('dailyreports')}));
+  DB.users.forEach(u=>searchIndex.push({label:u.name,sub:u.role,tag:'User',tagClass:'badge-blue',action:()=>showPage('users')}));
+  DB.documents.forEach(d=>searchIndex.push({label:d.name,sub:d.folder,tag:'Document',tagClass:'badge-gray',action:()=>showPage('documents')}));
+}
+document.getElementById('globalSearchInput').addEventListener('input',function(){
+  const q=this.value.toLowerCase().trim();
+  const res=document.getElementById('searchResults');
+  if(!q){res.classList.remove('open');return;}
+  const hits=searchIndex.filter(i=>(i.label+' '+i.sub).toLowerCase().includes(q)).slice(0,8);
+  if(!hits.length){res.innerHTML='<div class="search-result-item" style="color:var(--gray-400)">No results found</div>';res.classList.add('open');return;}
+  res.innerHTML=hits.map((h,i)=>`<div class="search-result-item" data-idx="${i}" onclick="searchHit(${searchIndex.indexOf(h)})"><div><div style="font-weight:600">${h.label}</div><div style="font-size:11px;color:var(--gray-400)">${h.sub}</div></div><span class="badge ${h.tagClass} search-result-tag">${h.tag}</span></div>`).join('');
+  res.classList.add('open');
+});
+function searchHit(i){
+  document.getElementById('globalSearchInput').value='';
+  document.getElementById('searchResults').classList.remove('open');
+  if(searchIndex[i])searchIndex[i].action();
+}
+document.addEventListener('click',function(e){
+  if(!document.getElementById('globalSearchBar').contains(e.target)){
+    document.getElementById('searchResults').classList.remove('open');
+  }
+});
+
+// ═══════════════ POPULATE DROPDOWNS ═══════════════
+function populateProjectDropdowns(){
+  const selects=['rptProject','mrProject','ganttProjectFilter','boqProject','wkProject','eqProject','msProject','payrollProjectFilter','rptFilterProject','docProject'];
+  const engineers=DB.users.filter(u=>u.role==='Engineer');
+  selects.forEach(id=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    const isFilter=id.includes('Filter')||id==='boqProject'||id==='ganttProjectFilter';
+    el.innerHTML=(isFilter?'<option value="">All Projects</option>':'')+
+      DB.projects.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+    if(id==='eqProject')el.insertAdjacentHTML('afterbegin','<option value="">None (Yard)</option>');
+  });
+  const engSel=document.getElementById('projEngineer');
+  if(engSel){
+    engSel.innerHTML='<option value="">Select Engineer</option>'+
+      engineers.map(u=>`<option value="${u.name}">${u.name}</option>`).join('');
+  }
+  const attSel=document.getElementById('attEmp');
+  if(attSel){
+    attSel.innerHTML=DB.workers.map(w=>`<option value="${w.id}">${w.name}</option>`).join('');
+  }
+}
+
+// ═══════════════ DASHBOARD ═══════════════
+function renderDashboard(){
+  const today_str=new Date().toLocaleDateString('en-PH',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+  document.getElementById('dashDate').textContent='📅 '+today_str;
+  const ongoing=DB.projects.filter(p=>p.status==='Ongoing').length;
+  const delayed=DB.projects.filter(p=>p.status==='Delayed').length;
+  const completed=DB.projects.filter(p=>p.status==='Completed').length;
+  const pending=DB.materialRequests.filter(m=>m.status==='Pending').length;
+  const present=DB.workers.filter(w=>w.status==='Active').length;
+  document.getElementById('dStat1').textContent=DB.projects.length;
+  document.getElementById('dStat2').textContent=ongoing;
+  document.getElementById('dStat3').textContent=delayed;
+  document.getElementById('dStat4').textContent=pending;
+  document.getElementById('dStat5').textContent=present;
+  document.getElementById('dStat6').textContent=completed;
+  // nav badges
+  document.getElementById('navBadgeProjects').textContent=DB.projects.length;
+  const pendingReports=DB.reports.filter(r=>r.status==='Under Review').length;
+  const rBadge=document.getElementById('navBadgeReports');
+  rBadge.textContent=pendingReports;rBadge.style.display=pendingReports?'':'none';
+  const mBadge=document.getElementById('navBadgeMaterial');
+  mBadge.textContent=pending;mBadge.style.display=pending?'':'none';
+  // Progress list
+  const top5=DB.projects.filter(p=>p.status!=='Completed').slice(0,5);
+  document.getElementById('dashProgressList').innerHTML=top5.map(p=>`
+    <div>
+      <div style="display:flex;justify-content:space-between;margin-bottom:5px;font-size:12.5px;">
+        <span style="font-weight:600;cursor:pointer;color:var(--navy)" onclick="showPage('projects');setTimeout(()=>viewProject('${p.id}'),300)">${p.name}</span>
+        <span style="color:${p.status==='Delayed'?'var(--red)':'var(--accent)'};font-weight:700">${p.progress}%</span>
+      </div>
+      <div class="progress-bar-wrap"><div class="progress-bar-fill${p.status==='Delayed'?' red':''}" style="width:${p.progress}%"></div></div>
+      <div style="font-size:11px;color:var(--gray-400);margin-top:3px;">${p.location} · <span class="badge ${getStatusBadge(p.status)}" style="font-size:10px;padding:2px 7px">${p.status}</span></div>
+    </div>`).join('');
+  // Activity
+  const recentActs=[
+    ...(DB.activity.slice(0,5)),
+    {icon:'📋',bg:'var(--blue-bg)',text:'Report submitted by Engr. Dela Cruz for Lipa Complex',time:'8:30 AM'},
+    {icon:'✅',bg:'var(--green-bg)',text:'MR-045 approved by Engr. Santos',time:'8:05 AM'},
+    {icon:'⚠️',bg:'var(--red-bg)',text:'Low stock alert: Portland Cement – 12 bags',time:'7:00 AM'},
+  ].slice(0,6);
+  document.getElementById('dashActivity').innerHTML=recentActs.map(a=>`
+    <div class="activity-item">
+      <div class="activity-dot" style="background:${a.bg}">${a.icon}</div>
+      <div><div class="activity-text">${a.text}</div><div class="activity-time">${a.time}</div></div>
+    </div>`).join('');
+  // Low stock
+  const lowStock=DB.inventory.filter(i=>i.stock<i.min);
+  document.getElementById('dashLowStockBadge').textContent=lowStock.length+' Item'+(lowStock.length===1?'':'s');
+  document.getElementById('dashLowStock').innerHTML=lowStock.length?lowStock.map(i=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 22px;border-bottom:1px solid var(--gray-100);">
+      <div><div style="font-size:13px;font-weight:600">${i.name}</div><div style="font-size:11px;color:var(--gray-400)">${i.category}</div></div>
+      <div style="text-align:right"><div style="font-family:'Syne',sans-serif;font-weight:700;color:var(--red)">${i.stock} ${i.unit}</div><div style="font-size:10px;color:var(--gray-400)">Min: ${i.min}</div></div>
+    </div>`).join(''):`<div class="empty-state"><p>No low stock items 🎉</p></div>`;
+  // Pending approvals
+  const pendingMR=DB.materialRequests.filter(m=>m.status==='Pending').slice(0,4);
+  document.getElementById('dashPendingApprovals').innerHTML=pendingMR.length?pendingMR.map(m=>`
+    <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 22px;border-bottom:1px solid var(--gray-100);">
+      <div><div style="font-size:13px;font-weight:600">${m.material}</div><div style="font-size:11px;color:var(--gray-400)">${m.id} · ${getProjectName(m.project)}</div></div>
+      <div style="display:flex;gap:6px;">
+        <button class="btn btn-success btn-sm" onclick="approveMR('${m.id}')">✓</button>
+        <button class="btn btn-danger btn-sm" onclick="rejectMR('${m.id}')">✗</button>
+      </div>
+    </div>`).join(''):`<div class="empty-state"><p>No pending approvals</p></div>`;
+  // Equipment status summary
+  const av=DB.equipment.filter(e=>e.status==='Available').length;
+  const inUse=DB.equipment.filter(e=>e.status==='In Use').length;
+  const maint=DB.equipment.filter(e=>e.status==='Maintenance').length;
+  document.getElementById('dashEquipStatus').innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px">Available</span><span class="badge badge-green">${av} units</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px">In Use</span><span class="badge badge-yellow">${inUse} units</span></div>
+      <div style="display:flex;justify-content:space-between;align-items:center;"><span style="font-size:13px">Maintenance</span><span class="badge badge-red">${maint} units</span></div>
+      <div style="padding-top:10px;border-top:1px solid var(--gray-100)"><button class="btn btn-outline btn-sm" style="width:100%" onclick="showPage('equipment')">View All Equipment →</button></div>
+    </div>`;
+}
+
+// ═══════════════ PROJECTS ═══════════════
+let _projView='cards';
+function switchProjectView(v,btn){
+  _projView=v;
+  document.querySelectorAll('#page-projects .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('projectCardsView').style.display=v==='cards'?'':'none';
+  document.getElementById('projectTableView').style.display=v==='table'?'':'none';
+  renderProjectsPage();
+}
+function renderProjectsPage(){
+  const q=(document.getElementById('projectSearch')?.value||'').toLowerCase();
+  const f=document.getElementById('projectFilter')?.value||'';
+  const filtered=DB.projects.filter(p=>{
+    const matchQ=!q||(p.name+p.location+p.type+p.status).toLowerCase().includes(q);
+    const matchF=!f||p.status===f;
+    return matchQ&&matchF;
+  });
+  if(_projView==='cards'||document.getElementById('projectCardsView').style.display!=='none'){
+    document.getElementById('projectCardsView').innerHTML=filtered.length?
+      `<div class="project-cards-grid">${filtered.map(p=>projectCard(p)).join('')}</div>`:
+      `<div class="empty-state"><h3>No projects found</h3><p>Try adjusting your search or filters.</p></div>`;
+  }
+  const tbody=document.getElementById('projectTableBody');
+  if(tbody){
+    tbody.innerHTML=filtered.map(p=>`<tr>
+      <td><strong style="cursor:pointer;color:var(--navy)" onclick="viewProject('${p.id}')">${p.name}</strong><br><span style="font-size:11px;color:var(--gray-400)">${p.id} · Started ${fmtDate(p.start)}</span></td>
+      <td>${p.location}</td>
+      <td><span class="badge ${getStatusBadge(p.status)}">${p.status}</span></td>
+      <td><div style="display:flex;align-items:center;gap:8px;min-width:120px;"><div class="progress-bar-wrap" style="flex:1"><div class="progress-bar-fill${p.status==='Delayed'?' red':p.progress===100?' green':''}" style="width:${p.progress}%"></div></div><span style="font-size:11px;font-weight:700;color:var(--accent)">${p.progress}%</span></div></td>
+      <td><div class="avatar-stack">${p.team.map(t=>`<div class="avatar-mini">${t}</div>`).join('')}</div></td>
+      <td>${fmtMoney(p.contract)}</td>
+      <td style="white-space:nowrap;"><button class="btn btn-ghost btn-sm" onclick="viewProject('${p.id}')">View</button> <button class="btn btn-ghost btn-sm" onclick="editProject('${p.id}')">Edit</button> <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteProject('${p.id}')">Delete</button></td>
+    </tr>`).join('');
+  }
+}
+function projectCard(p){
+  return`<div class="project-card" onclick="viewProject('${p.id}')">
+    <div class="project-card-header">
+      <div><div class="project-name">${p.name}</div><div class="project-location">📍 ${p.location}</div></div>
+      <span class="badge ${getStatusBadge(p.status)}">${p.status}</span>
+    </div>
+    <div class="project-progress-row"><span style="font-size:12px;color:var(--gray-600)">${p.type}</span><span class="project-pct">${p.progress}%</span></div>
+    <div class="progress-bar-wrap"><div class="progress-bar-fill${p.status==='Delayed'?' red':p.progress===100?' green':''}" style="width:${p.progress}%"></div></div>
+    <div class="project-meta">
+      <div class="project-meta-item">📅 ${fmtDate(p.end)}</div>
+      <div class="project-meta-item">💰 ${fmtMoney(p.contract)}</div>
+      <div class="avatar-stack" style="margin-left:auto">${p.team.map(t=>`<div class="avatar-mini">${t}</div>`).join('')}</div>
+    </div>
+  </div>`;
+}
+function viewProject(id){
+  const p=DB.projects.find(x=>x.id===id);if(!p)return;
+  document.getElementById('viewProjTitle').textContent=p.name;
+  const mrs=DB.materialRequests.filter(m=>m.project===id);
+  const rpts=DB.reports.filter(r=>r.project===id);
+  const boq=DB.boqItems[id]||[];
+  const boqTotal=boq.reduce((s,i)=>s+i.qty*i.unitCost,0);
+  document.getElementById('viewProjectBody').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Project ID</label><div style="font-size:14px;margin-top:4px">${p.id}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Status</label><div style="margin-top:4px"><span class="badge ${getStatusBadge(p.status)}">${p.status}</span></div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Location</label><div style="font-size:14px;margin-top:4px">📍 ${p.location}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Type</label><div style="font-size:14px;margin-top:4px">${p.type}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Start Date</label><div style="font-size:14px;margin-top:4px">${fmtDate(p.start)}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">End Date</label><div style="font-size:14px;margin-top:4px">${fmtDate(p.end)}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Contract Amount</label><div style="font-size:14px;margin-top:4px;font-weight:700;color:var(--accent)">${fmtMoney(p.contract)}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">BOQ Total</label><div style="font-size:14px;margin-top:4px">${fmtMoney(boqTotal)||'Not set'}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Engineer</label><div style="font-size:14px;margin-top:4px">${p.engineer}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Progress</label><div style="font-size:14px;margin-top:4px;font-weight:700;color:var(--accent)">${p.progress}%</div></div>
+    </div>
+    <div style="margin-bottom:16px;"><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Scope of Work</label><div style="font-size:13.5px;margin-top:6px;line-height:1.6;color:var(--gray-600)">${p.scope||'—'}</div></div>
+    <div style="margin-bottom:16px;"><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Progress</label>
+      <div style="margin-top:8px"><div class="progress-bar-wrap" style="height:12px"><div class="progress-bar-fill${p.progress===100?' green':p.status==='Delayed'?' red':''}" style="width:${p.progress}%"></div></div></div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-top:16px;">
+      <div style="background:var(--blue-bg);border-radius:10px;padding:14px;text-align:center;cursor:pointer" onclick="closeModal('viewProjectModal');showPage('dailyreports')"><div style="font-size:22px">📋</div><div style="font-size:13px;font-weight:600;margin-top:4px">${rpts.length} Reports</div></div>
+      <div style="background:var(--purple-bg);border-radius:10px;padding:14px;text-align:center;cursor:pointer" onclick="closeModal('viewProjectModal');showPage('material')"><div style="font-size:22px">📦</div><div style="font-size:13px;font-weight:600;margin-top:4px">${mrs.length} Requests</div></div>
+      <div style="background:var(--green-bg);border-radius:10px;padding:14px;text-align:center;cursor:pointer" onclick="closeModal('viewProjectModal');showPage('boq');document.getElementById('boqProject').value='${id}';renderBOQ()"><div style="font-size:22px">💰</div><div style="font-size:13px;font-weight:600;margin-top:4px">${boq.length} BOQ Items</div></div>
+    </div>`;
+  document.getElementById('viewProjEditBtn').onclick=()=>{closeModal('viewProjectModal');editProject(id);};
+  openModal('viewProjectModal');
+}
+function editProject(id){
+  const p=DB.projects.find(x=>x.id===id);if(!p)return;
+  document.getElementById('projectModalTitle').textContent='Edit Project';
+  document.getElementById('editProjectId').value=id;
+  document.getElementById('projName').value=p.name;
+  document.getElementById('projLocation').value=p.location;
+  document.getElementById('projType').value=p.type;
+  document.getElementById('projStart').value=p.start;
+  document.getElementById('projEnd').value=p.end;
+  document.getElementById('projContract').value=p.contract;
+  document.getElementById('projStatus').value=p.status;
+  document.getElementById('projProgress').value=p.progress;
+  document.getElementById('projScope').value=p.scope||'';
+  openModal('addProjectModal');
+}
+function saveProject(){
+  const name=document.getElementById('projName').value.trim();
+  const location=document.getElementById('projLocation').value.trim();
+  const start=document.getElementById('projStart').value;
+  const end=document.getElementById('projEnd').value;
+  if(!name||!location||!start||!end){showToast('Please fill in all required fields.','error');return;}
+  const editId=document.getElementById('editProjectId').value;
+  const data={
+    name,location,type:document.getElementById('projType').value,
+    start,end,contract:+document.getElementById('projContract').value||0,
+    status:document.getElementById('projStatus').value,
+    progress:Math.min(100,Math.max(0,+document.getElementById('projProgress').value||0)),
+    engineer:document.getElementById('projEngineer').value,
+    scope:document.getElementById('projScope').value,
+    team:[initials(document.getElementById('projEngineer').value||name)],
+  };
+  if(editId){
+    const idx=DB.projects.findIndex(x=>x.id===editId);
+    if(idx>=0){DB.projects[idx]={...DB.projects[idx],...data};addActivity('✏️','var(--blue-bg)',`Project "${name}" updated`);}
+    showToast('Project updated successfully!','success');
+  } else {
+    const newId='PRJ-'+(DB.projects.length+1).toString().padStart(3,'0');
+    DB.projects.push({id:newId,...data});
+    addActivity('➕','var(--green-bg)',`New project "${name}" added`);
+    addNotification('🏗️','var(--blue-bg)',`New project added: <strong>${name}</strong>`,'projects');
+    showToast('Project added successfully!','success');
+  }
+  document.getElementById('editProjectId').value='';
+  document.getElementById('projectModalTitle').textContent='Add New Project';
+  closeModal('addProjectModal');
+  populateProjectDropdowns();
+  renderDashboard();
+  renderProjectsPage();
+  buildSearchIndex();
+  ['projName','projLocation','projStart','projEnd','projContract','projScope','projProgress'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+}
+function deleteProject(id){
+  const p=DB.projects.find(x=>x.id===id);if(!p)return;
+  showConfirm('Delete Project',`Are you sure you want to delete "${p.name}"? This cannot be undone.`,'Delete','btn-danger',()=>{
+    DB.projects=DB.projects.filter(x=>x.id!==id);
+    showToast('Project deleted.','');
+    renderProjectsPage();renderDashboard();populateProjectDropdowns();buildSearchIndex();
+  });
+}
+
+// ═══════════════ SCHEDULING ═══════════════
+function renderSchedulingPage(){
+  // Populate gantt filter
+  const gf=document.getElementById('ganttProjectFilter');
+  gf.innerHTML='<option value="">All Projects</option>'+DB.projects.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  renderGantt();
+  renderMilestonesTable();
+  // Populate milestone project dropdown
+  document.getElementById('msProject').innerHTML=DB.projects.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+}
+function renderGantt(){
+  const filterPrj=document.getElementById('ganttProjectFilter')?.value||'';
+  const projects=filterPrj?DB.projects.filter(p=>p.id===filterPrj):DB.projects.slice(0,8);
+  // Calculate time range
+  const allDates=projects.flatMap(p=>[new Date(p.start),new Date(p.end)]);
+  const minDate=new Date(Math.min(...allDates));
+  const maxDate=new Date(Math.max(...allDates));
+  minDate.setDate(1);maxDate.setMonth(maxDate.getMonth()+1,1);
+  const totalMs=maxDate-minDate;
+  // Month labels
+  const months=[];let d=new Date(minDate);
+  while(d<maxDate){months.push(d.toLocaleDateString('en-PH',{month:'short',year:'2-digit'}));d.setMonth(d.getMonth()+1);}
+  document.getElementById('ganttMonthLabels').innerHTML=months.map(m=>`<span style="flex:1;text-align:center">${m}</span>`).join('');
+  // Bars
+  document.getElementById('ganttChart').innerHTML=projects.map(p=>{
+    const s=new Date(p.start),e=new Date(p.end);
+    const left=((s-minDate)/totalMs*100).toFixed(1);
+    const width=((e-s)/totalMs*100).toFixed(1);
+    const color=p.status==='Delayed'?'red':p.status==='Completed'?'green':p.status==='On Hold'?'':'';
+    return`<div class="gantt-row">
+      <div class="gantt-label" title="${p.name}">${p.name.length>20?p.name.slice(0,18)+'…':p.name}</div>
+      <div class="gantt-track">
+        <div class="gantt-bar${color?' '+color:''}" style="left:${left}%;width:${Math.max(width,3)}%;" title="${p.name}: ${fmtDate(p.start)} – ${fmtDate(p.end)}">${p.progress}%</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function renderMilestonesTable(){
+  const tbody=document.getElementById('milestonesTableBody');
+  tbody.innerHTML=DB.milestones.map(m=>`<tr>
+    <td>${getProjectName(m.project)}</td>
+    <td><strong>${m.name}</strong></td>
+    <td>${fmtDate(m.date)}</td>
+    <td><span class="badge ${getStatusBadge(m.status)}">${m.status}</span></td>
+    <td><button class="btn btn-ghost btn-sm" onclick="editMilestone('${m.id}')">Edit</button> <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteMilestone('${m.id}')">Delete</button></td>
+  </tr>`).join('');
+}
+function saveMilestone(){
+  const project=document.getElementById('msProject').value;
+  const name=document.getElementById('msName').value.trim();
+  const date=document.getElementById('msDate').value;
+  if(!project||!name||!date){showToast('Fill in required fields.','error');return;}
+  const newId='MS-'+String(DB._msCounter++).padStart(3,'0');
+  DB.milestones.push({id:newId,project,name,date,status:document.getElementById('msStatus').value,notes:document.getElementById('msNotes').value});
+  addActivity('🚩','var(--blue-bg)',`Milestone "${name}" added for ${getProjectName(project)}`);
+  showToast('Milestone saved!','success');
+  closeModal('addMilestoneModal');
+  ['msName','msDate','msNotes'].forEach(id=>document.getElementById(id).value='');
+  renderMilestonesTable();
+}
+function editMilestone(id){
+  const m=DB.milestones.find(x=>x.id===id);if(!m)return;
+  document.getElementById('msProject').value=m.project;
+  document.getElementById('msName').value=m.name;
+  document.getElementById('msDate').value=m.date;
+  document.getElementById('msStatus').value=m.status;
+  document.getElementById('msNotes').value=m.notes||'';
+  openModal('addMilestoneModal');
+}
+function deleteMilestone(id){
+  showConfirm('Delete Milestone','Delete this milestone?','Delete','btn-danger',()=>{
+    DB.milestones=DB.milestones.filter(m=>m.id!==id);
+    showToast('Milestone deleted.','');renderMilestonesTable();
+  });
+}
+
+// ═══════════════ DAILY REPORTS ═══════════════
+function renderReportsPage(){
+  document.getElementById('rptDate').value=today();
+  renderReportsTable();
+  // populate filter
+  const fp=document.getElementById('rptFilterProject');
+  fp.innerHTML='<option value="">All Projects</option>'+DB.projects.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+}
+function renderReportsTable(){
+  const fp=document.getElementById('rptFilterProject')?.value||'';
+  const filtered=fp?DB.reports.filter(r=>r.project===fp):DB.reports;
+  document.getElementById('reportsCountBadge').textContent=filtered.length;
+  document.getElementById('reportsTableBody').innerHTML=filtered.map(r=>`<tr>
+    <td>${fmtDate(r.date)}</td>
+    <td>${getProjectName(r.project)}</td>
+    <td>${r.engineer}</td>
+    <td>${r.workers}</td>
+    <td><span class="badge ${getStatusBadge(r.status)}">${r.status}</span></td>
+    <td><button class="btn btn-ghost btn-sm" onclick="viewReport('${r.id}')">View</button></td>
+  </tr>`).join('');
+}
+function showReportForm(){document.getElementById('reportFormCard').scrollIntoView({behavior:'smooth'});}
+function submitDailyReport(){
+  const date=document.getElementById('rptDate').value;
+  const project=document.getElementById('rptProject').value;
+  const engineer=document.getElementById('rptEngineer').value.trim();
+  const work=document.getElementById('rptWork').value.trim();
+  if(!date||!project||!engineer||!work){showToast('Please fill all required fields.','error');return;}
+  const newId='RPT-'+(DB._rptCounter++).toString().padStart(3,'0');
+  const r={id:newId,date,project,engineer,weather:document.getElementById('rptWeather').value,work,issues:document.getElementById('rptIssues').value,workers:+document.getElementById('rptWorkers').value||0,status:'Submitted'};
+  DB.reports.unshift(r);
+  addActivity('📋','var(--blue-bg)',`Report submitted by ${engineer} for ${getProjectName(project)}`);
+  addNotification('📋','var(--blue-bg)',`Daily report submitted by <strong>${engineer}</strong> for ${getProjectName(project)}`,'dailyreports');
+  showToast('Report submitted successfully!','success');
+  ['rptEngineer','rptWork','rptIssues','rptWorkers'].forEach(id=>document.getElementById(id).value='');
+  renderReportsTable();renderDashboard();
+}
+function viewReport(id){
+  const r=DB.reports.find(x=>x.id===id);if(!r)return;
+  document.getElementById('viewReportBody').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:20px;">
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Report ID</label><div style="font-size:14px;margin-top:4px">${r.id}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Status</label><div style="margin-top:4px"><span class="badge ${getStatusBadge(r.status)}">${r.status}</span></div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Date</label><div style="font-size:14px;margin-top:4px">${fmtDate(r.date)}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Project</label><div style="font-size:14px;margin-top:4px">${getProjectName(r.project)}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Engineer</label><div style="font-size:14px;margin-top:4px">${r.engineer}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Weather</label><div style="font-size:14px;margin-top:4px">${r.weather}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Workers Present</label><div style="font-size:14px;margin-top:4px">${r.workers}</div></div>
+    </div>
+    <div style="margin-bottom:16px;"><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Work Accomplished</label><div style="font-size:13.5px;margin-top:8px;padding:14px;background:var(--gray-50);border-radius:8px;line-height:1.6">${r.work}</div></div>
+    <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Issues / Concerns</label><div style="font-size:13.5px;margin-top:8px;padding:14px;background:var(--gray-50);border-radius:8px;line-height:1.6">${r.issues||'None reported.'}</div></div>`;
+  openModal('viewReportModal');
+}
+
+// ═══════════════ MATERIAL REQUESTS ═══════════════
+function renderMaterialPage(){
+  renderMaterialTable();
+}
+function renderMaterialTable(){
+  const sf=document.getElementById('mrFilterStatus')?.value||'';
+  const filtered=sf?DB.materialRequests.filter(m=>m.status===sf):DB.materialRequests;
+  document.getElementById('materialTableBody').innerHTML=filtered.map(m=>`<tr>
+    <td><strong>${m.id}</strong></td>
+    <td>${m.material}</td>
+    <td>${m.qty} ${m.unit}</td>
+    <td style="font-size:12px">${getProjectName(m.project)}</td>
+    <td><span class="badge ${getStatusBadge(m.status)}">${m.status}</span></td>
+    <td style="white-space:nowrap;">
+      ${m.status==='Pending'?`<button class="btn btn-success btn-sm" onclick="approveMR('${m.id}')">Approve</button> <button class="btn btn-danger btn-sm" onclick="rejectMR('${m.id}')">Reject</button>`:''}
+      ${m.status==='Approved'?`<button class="btn btn-outline btn-sm" onclick="deliverMR('${m.id}')">Mark Delivered</button>`:''}
+      <button class="btn btn-ghost btn-sm" onclick="viewMR('${m.id}')">View</button>
+    </td>
+  </tr>`).join('');
+}
+function submitMaterialRequest(){
+  const project=document.getElementById('mrProject').value;
+  const material=document.getElementById('mrMaterial').value.trim();
+  const qty=document.getElementById('mrQty').value;
+  const by=document.getElementById('mrBy').value.trim();
+  if(!project||!material||!qty||!by){showToast('Fill in required fields.','error');return;}
+  const newId='MR-'+String(DB._mrCounter++).padStart(3,'0');
+  const mr={id:newId,material,qty,unit:document.getElementById('mrUnit').value,project,by,purpose:document.getElementById('mrPurpose').value,dateNeeded:document.getElementById('mrDateNeeded').value,status:'Pending',date:today()};
+  DB.materialRequests.unshift(mr);
+  addActivity('📦','var(--purple-bg)',`Material request ${newId} submitted: ${material}`);
+  addNotification('📦','var(--purple-bg)',`New material request <strong>${newId}</strong>: ${material} – ${qty} ${mr.unit}`,'material');
+  showToast('Material request submitted!','success');
+  ['mrMaterial','mrQty','mrPurpose','mrBy','mrDateNeeded'].forEach(id=>document.getElementById(id).value='');
+  renderMaterialTable();renderDashboard();buildSearchIndex();
+}
+function approveMR(id){
+  const m=DB.materialRequests.find(x=>x.id===id);if(!m)return;
+  m.status='Approved';
+  addActivity('✅','var(--green-bg)',`MR ${id} approved`);
+  addNotification('✅','var(--green-bg)',`Material request <strong>${id}</strong> has been <strong>approved</strong>`,'material');
+  showToast(`${id} approved!`,'success');
+  renderMaterialTable();renderDashboard();
+}
+function rejectMR(id){
+  showConfirm('Reject Request',`Reject material request ${id}?`,'Reject','btn-danger',()=>{
+    const m=DB.materialRequests.find(x=>x.id===id);if(!m)return;
+    m.status='Rejected';
+    addActivity('❌','var(--red-bg)',`MR ${id} rejected`);
+    showToast(`${id} rejected.`,'');
+    renderMaterialTable();renderDashboard();
+  });
+}
+function deliverMR(id){
+  const m=DB.materialRequests.find(x=>x.id===id);if(!m)return;
+  // Deduct from inventory if exists
+  const inv=DB.inventory.find(i=>i.name.toLowerCase().includes(m.material.toLowerCase().slice(0,8)));
+  if(inv){
+    inv.stock=Math.max(0,inv.stock-parseInt(m.qty));
+    inv.updated=today();
+    if(inv.stock<inv.min){
+      addNotification('⚠️','var(--red-bg)',`<strong>Low stock alert:</strong> ${inv.name} – only ${inv.stock} ${inv.unit} remaining`,'inventory');
+    }
+  }
+  m.status='Delivered';
+  addActivity('🚚','var(--blue-bg)',`MR ${id} delivered`);
+  showToast(`${id} marked as delivered.`,'success');
+  renderMaterialTable();renderDashboard();renderInventoryPage();
+}
+function viewMR(id){
+  const m=DB.materialRequests.find(x=>x.id===id);if(!m)return;
+  document.getElementById('viewMRBody').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;">
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Ref #</label><div style="font-size:14px;margin-top:4px;font-weight:700">${m.id}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Status</label><div style="margin-top:4px"><span class="badge ${getStatusBadge(m.status)}">${m.status}</span></div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Material</label><div style="font-size:14px;margin-top:4px">${m.material}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Quantity</label><div style="font-size:14px;margin-top:4px">${m.qty} ${m.unit}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Project</label><div style="font-size:14px;margin-top:4px">${getProjectName(m.project)}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Requested By</label><div style="font-size:14px;margin-top:4px">${m.by}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Date Submitted</label><div style="font-size:14px;margin-top:4px">${fmtDate(m.date)}</div></div>
+      <div><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Date Needed</label><div style="font-size:14px;margin-top:4px">${fmtDate(m.dateNeeded)||'—'}</div></div>
+      <div style="grid-column:1/-1"><label style="font-size:11px;font-weight:700;color:var(--gray-400);text-transform:uppercase;">Purpose / Remarks</label><div style="font-size:13.5px;margin-top:8px;padding:12px;background:var(--gray-50);border-radius:8px;line-height:1.6">${m.purpose||'—'}</div></div>
+    </div>`;
+  openModal('viewMRModal');
+}
+
+// ═══════════════ INVENTORY ═══════════════
+function renderInventoryPage(){renderInventoryTable();}
+function renderInventoryTable(){
+  const q=(document.getElementById('invSearch')?.value||'').toLowerCase();
+  const filtered=DB.inventory.filter(i=>!q||(i.name+i.category).toLowerCase().includes(q));
+  const lowCount=DB.inventory.filter(i=>i.stock<i.min).length;
+  document.getElementById('invLowStockBadge').textContent=lowCount+' Low Stock';
+  document.getElementById('inventoryTableBody').innerHTML=filtered.map(i=>{
+    const isLow=i.stock<i.min;
+    return`<tr>
+      <td><strong>${i.name}</strong></td>
+      <td>${i.category}</td>
+      <td>${i.unit}</td>
+      <td style="text-align:center;font-weight:700;color:${isLow?'var(--red)':'var(--navy)'}">${i.stock}</td>
+      <td style="text-align:center">${i.min}</td>
+      <td><span class="badge ${isLow?'badge-red':'badge-green'}">${isLow?'Low Stock':'Sufficient'}</span></td>
+      <td>${fmtDate(i.updated)}</td>
+      <td style="white-space:nowrap;"><button class="btn btn-success btn-sm" onclick="openRestockModal('${i.id}')">Restock</button> <button class="btn btn-ghost btn-sm" onclick="editInventoryItem('${i.id}')">Edit</button> <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteInventoryItem('${i.id}')">Delete</button></td>
+    </tr>`;
+  }).join('');
+}
+function openRestockModal(id){
+  const i=DB.inventory.find(x=>x.id===id);if(!i)return;
+  document.getElementById('restockId').value=id;
+  document.getElementById('restockName').value=i.name;
+  document.getElementById('restockQty').value='';
+  document.getElementById('restockNotes').value='';
+  openModal('restockModal');
+}
+function saveRestock(){
+  const id=document.getElementById('restockId').value;
+  const qty=+document.getElementById('restockQty').value;
+  if(!qty||qty<1){showToast('Enter a valid quantity.','error');return;}
+  const i=DB.inventory.find(x=>x.id===id);if(!i)return;
+  i.stock+=qty;i.updated=today();
+  addActivity('📦','var(--green-bg)',`Restocked ${i.name}: +${qty} ${i.unit}`);
+  showToast(`${i.name} restocked by ${qty} ${i.unit}.`,'success');
+  closeModal('restockModal');
+  renderInventoryTable();renderDashboard();
+}
+function editInventoryItem(id){
+  const i=DB.inventory.find(x=>x.id===id);if(!i)return;
+  document.getElementById('invModalTitle').textContent='Edit Inventory Item';
+  document.getElementById('editInvId').value=id;
+  document.getElementById('invName').value=i.name;
+  document.getElementById('invCategory').value=i.category;
+  document.getElementById('invUnit').value=i.unit;
+  document.getElementById('invStock').value=i.stock;
+  document.getElementById('invMin').value=i.min;
+  openModal('addInventoryModal');
+}
+function saveInventoryItem(){
+  const name=document.getElementById('invName').value.trim();
+  const stock=+document.getElementById('invStock').value;
+  const min=+document.getElementById('invMin').value;
+  if(!name){showToast('Enter material name.','error');return;}
+  const editId=document.getElementById('editInvId').value;
+  const data={name,category:document.getElementById('invCategory').value,unit:document.getElementById('invUnit').value,stock,min,updated:today()};
+  if(editId){
+    const idx=DB.inventory.findIndex(x=>x.id===editId);
+    if(idx>=0)DB.inventory[idx]={...DB.inventory[idx],...data};
+    showToast('Inventory item updated.','success');
+  } else {
+    const newId='INV-'+(DB.inventory.length+1).toString().padStart(3,'0');
+    DB.inventory.push({id:newId,...data});
+    addActivity('📦','var(--green-bg)',`New inventory item added: ${name}`);
+    showToast('Material added to inventory!','success');
+  }
+  document.getElementById('editInvId').value='';
+  document.getElementById('invModalTitle').textContent='Add Material to Inventory';
+  closeModal('addInventoryModal');
+  renderInventoryTable();renderDashboard();buildSearchIndex();
+}
+function deleteInventoryItem(id){
+  const i=DB.inventory.find(x=>x.id===id);if(!i)return;
+  showConfirm('Delete Item',`Delete "${i.name}" from inventory?`,'Delete','btn-danger',()=>{
+    DB.inventory=DB.inventory.filter(x=>x.id!==id);
+    showToast('Item deleted.','');renderInventoryTable();renderDashboard();
+  });
+}
+
+// ═══════════════ PAYROLL ═══════════════
+function renderPayrollPage(){
+  const now=new Date();
+  const weekStart=new Date(now);weekStart.setDate(now.getDate()-now.getDay()+1);
+  const weekEnd=new Date(weekStart);weekEnd.setDate(weekStart.getDate()+6);
+  document.getElementById('payrollWeekTitle').textContent=`Weekly Payroll – Week ${Math.ceil(now.getDate()/7)} (${weekStart.toLocaleDateString('en-PH',{month:'short',day:'numeric'})}–${weekEnd.toLocaleDateString('en-PH',{month:'short',day:'numeric',year:'numeric'})})`;
+  renderPayrollStats();
+  renderPayrollTable();
+  // att emp dropdown
+  document.getElementById('attEmp').innerHTML=DB.workers.map(w=>`<option value="${w.id}">${w.name}</option>`).join('');
+  // filter
+  const pf=document.getElementById('payrollProjectFilter');
+  pf.innerHTML='<option value="">All Projects</option>'+DB.projects.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+}
+function renderPayrollStats(){
+  const active=DB.workers.filter(w=>w.status==='Active').length;
+  const present=DB.workers.filter(w=>w.status==='Active'&&w.days>0).length;
+  const absent=active-present;
+  const totalPay=DB.workers.reduce((s,w)=>{
+    const base=w.days*w.rate;
+    const ot=w.ot*(w.rate/8)*1.25;
+    return s+base+ot;
+  },0);
+  document.getElementById('payrollStats').innerHTML=`
+    <div class="stat-card"><div class="stat-label">Total Workers</div><div class="stat-value">${DB.workers.length}</div><div class="stat-change">Registered</div></div>
+    <div class="stat-card" style="--accent-line:var(--green)"><div class="stat-label">Present Today</div><div class="stat-value">${present}</div><div class="stat-change up">${active>0?(present/active*100).toFixed(1):0}% attendance</div></div>
+    <div class="stat-card" style="--accent-line:var(--red)"><div class="stat-label">Absent</div><div class="stat-value">${absent}</div><div class="stat-change down">From active workers</div></div>
+    <div class="stat-card" style="--accent-line:var(--purple)"><div class="stat-label">Total Payroll</div><div class="stat-value" style="font-size:22px">${fmtMoney(totalPay).slice(0,7)}+</div><div class="stat-change">This week</div></div>`;
+}
+function renderPayrollTable(){
+  const pf=document.getElementById('payrollProjectFilter')?.value||'';
+  const filtered=pf?DB.workers.filter(w=>w.project===pf):DB.workers;
+  document.getElementById('payrollTableBody').innerHTML=filtered.map(w=>{
+    const base=w.days*w.rate;
+    const ot=w.ot*(w.rate/8)*1.25;
+    const total=base+ot;
+    const paid=w.paid||false;
+    return`<tr>
+      <td><strong>${w.name}</strong></td>
+      <td>${w.role}</td>
+      <td style="font-size:12px">${getProjectName(w.project)}</td>
+      <td style="text-align:center">${w.days}</td>
+      <td style="text-align:center">${w.ot}</td>
+      <td>${w.rate.toLocaleString()}</td>
+      <td>${ot>0?ot.toLocaleString('en-PH',{minimumFractionDigits:2}):'—'}</td>
+      <td style="font-weight:700;color:var(--green)">${total.toLocaleString('en-PH',{minimumFractionDigits:2})}</td>
+      <td><span class="badge ${paid?'badge-green':'badge-yellow'}">${paid?'Paid':'Pending'}</span></td>
+      <td style="white-space:nowrap;">
+        ${!paid?`<button class="btn btn-success btn-sm" onclick="markPaid('${w.id}')">Mark Paid</button> `:''}
+        <button class="btn btn-ghost btn-sm" onclick="editWorker('${w.id}')">Edit</button>
+        <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteWorker('${w.id}')">Delete</button>
+      </td>
+    </tr>`;
+  }).join('');
+}
+function markPaid(id){
+  const w=DB.workers.find(x=>x.id===id);if(!w)return;
+  w.paid=true;
+  addActivity('💰','var(--green-bg)',`Payroll marked as paid for ${w.name}`);
+  showToast(`${w.name} marked as paid.`,'success');
+  renderPayrollTable();renderPayrollStats();
+}
+function saveAttendance(){
+  const id=document.getElementById('attEmp').value;
+  const days=+document.getElementById('attDays').value;
+  const ot=+document.getElementById('attOT').value;
+  const w=DB.workers.find(x=>x.id===id);if(!w)return;
+  w.days=Math.min(7,Math.max(0,days));
+  w.ot=Math.max(0,ot);
+  w.paid=false;
+  showToast(`Attendance updated for ${w.name}.`,'success');
+  renderPayrollTable();renderPayrollStats();renderDashboard();
+}
+function saveWorker(){
+  const name=document.getElementById('wkName').value.trim();
+  const rate=+document.getElementById('wkRate').value;
+  if(!name||!rate){showToast('Fill in required fields.','error');return;}
+  const editId=document.getElementById('editWorkerId').value;
+  const data={name,role:document.getElementById('wkRole').value,rate,project:document.getElementById('wkProject').value,status:document.getElementById('wkStatus').value,days:0,ot:0,paid:false};
+  if(editId){
+    const idx=DB.workers.findIndex(x=>x.id===editId);
+    if(idx>=0)DB.workers[idx]={...DB.workers[idx],...data};
+    showToast('Worker updated.','success');
+  } else {
+    const newId='WK-'+(DB.workers.length+1).toString().padStart(3,'0');
+    DB.workers.push({id:newId,...data});
+    showToast('Worker added!','success');
+    addActivity('👷','var(--yellow-bg)',`New worker added: ${name}`);
+  }
+  document.getElementById('editWorkerId').value='';
+  document.getElementById('workerModalTitle').textContent='Add Worker';
+  closeModal('addWorkerModal');
+  renderPayrollTable();renderPayrollStats();renderDashboard();buildSearchIndex();
+  ['wkName','wkRate'].forEach(id=>document.getElementById(id).value='');
+}
+function editWorker(id){
+  const w=DB.workers.find(x=>x.id===id);if(!w)return;
+  document.getElementById('workerModalTitle').textContent='Edit Worker';
+  document.getElementById('editWorkerId').value=id;
+  document.getElementById('wkName').value=w.name;
+  document.getElementById('wkRole').value=w.role;
+  document.getElementById('wkRate').value=w.rate;
+  document.getElementById('wkProject').value=w.project;
+  document.getElementById('wkStatus').value=w.status;
+  openModal('addWorkerModal');
+}
+function deleteWorker(id){
+  const w=DB.workers.find(x=>x.id===id);if(!w)return;
+  showConfirm('Delete Worker',`Remove "${w.name}" from payroll?`,'Delete','btn-danger',()=>{
+    DB.workers=DB.workers.filter(x=>x.id!==id);
+    showToast('Worker removed.','');renderPayrollTable();renderPayrollStats();renderDashboard();
+  });
+}
+function exportPayrollCSV(){
+  const header='Employee,Role,Project,Days Present,OT Hours,Daily Rate,OT Pay,Total Pay,Status\n';
+  const rows=DB.workers.map(w=>{
+    const base=w.days*w.rate;const ot=w.ot*(w.rate/8)*1.25;const total=base+ot;
+    return`"${w.name}","${w.role}","${getProjectName(w.project)}",${w.days},${w.ot},${w.rate},${ot.toFixed(2)},${total.toFixed(2)},"${w.paid?'Paid':'Pending'}"`;
+  }).join('\n');
+  const blob=new Blob([header+rows],{type:'text/csv'});
+  const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='payroll_export.csv';a.click();
+  showToast('Payroll exported as CSV.','success');
+}
+function printPayroll(){window.print();}
+
+// ═══════════════ EQUIPMENT ═══════════════
+function renderEquipmentPage(){renderEquipmentStats();renderEquipmentGrid();}
+function renderEquipmentStats(){
+  const av=DB.equipment.filter(e=>e.status==='Available').length;
+  const inUse=DB.equipment.filter(e=>e.status==='In Use').length;
+  const maint=DB.equipment.filter(e=>e.status==='Maintenance').length;
+  document.getElementById('equipStats').innerHTML=`
+    <div class="stat-card" style="--accent-line:var(--green)"><div class="stat-label">Available</div><div class="stat-value">${av}</div></div>
+    <div class="stat-card" style="--accent-line:var(--accent)"><div class="stat-label">In Use</div><div class="stat-value">${inUse}</div></div>
+    <div class="stat-card" style="--accent-line:var(--red)"><div class="stat-label">Maintenance</div><div class="stat-value">${maint}</div></div>
+    <div class="stat-card" style="--accent-line:var(--gray-400)"><div class="stat-label">Total Units</div><div class="stat-value">${DB.equipment.length}</div></div>`;
+}
+function renderEquipmentGrid(){
+  const f=document.getElementById('equipFilter')?.value||'';
+  const filtered=f?DB.equipment.filter(e=>e.status===f):DB.equipment;
+  document.getElementById('equipmentGrid').innerHTML=filtered.map(e=>`
+    <div class="equip-card">
+      <div class="equip-icon">${e.icon}</div>
+      <div class="equip-name">${e.name}</div>
+      <div class="equip-detail">${e.model}${e.project?' · '+getProjectName(e.project):' · Yard'}</div>
+      <div class="equip-status">
+        <span class="badge ${getStatusBadge(e.status)}">${e.status}</span>
+        <div style="display:flex;gap:4px;">
+          <button class="btn btn-ghost btn-sm" onclick="editEquipment('${e.id}')" data-tip="Edit">✏️</button>
+          <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteEquipment('${e.id}')" data-tip="Delete">🗑️</button>
+        </div>
+      </div>
+      ${e.maintDate?`<div style="font-size:10.5px;color:var(--gray-400);margin-top:8px;">🔧 Maintenance: ${fmtDate(e.maintDate)}</div>`:''}
+    </div>`).join('');
+}
+function saveEquipment(){
+  const name=document.getElementById('eqName').value.trim();
+  if(!name){showToast('Enter equipment name.','error');return;}
+  const editId=document.getElementById('editEquipId').value;
+  const data={name,model:document.getElementById('eqModel').value,icon:document.getElementById('eqIcon').value,status:document.getElementById('eqStatus').value,project:document.getElementById('eqProject').value,maintDate:document.getElementById('eqMaintDate').value};
+  if(editId){
+    const idx=DB.equipment.findIndex(x=>x.id===editId);
+    if(idx>=0)DB.equipment[idx]={...DB.equipment[idx],...data};
+    showToast('Equipment updated.','success');
+  } else {
+    const newId='EQ-'+(DB.equipment.length+1).toString().padStart(3,'0');
+    DB.equipment.push({id:newId,...data});
+    addActivity('🚜','var(--yellow-bg)',`New equipment added: ${name}`);
+    showToast('Equipment added!','success');
+  }
+  document.getElementById('editEquipId').value='';
+  document.getElementById('equipModalTitle').textContent='Add Equipment';
+  closeModal('addEquipModal');
+  renderEquipmentStats();renderEquipmentGrid();renderDashboard();buildSearchIndex();
+  ['eqName','eqModel','eqMaintDate'].forEach(id=>document.getElementById(id).value='');
+}
+function editEquipment(id){
+  const e=DB.equipment.find(x=>x.id===id);if(!e)return;
+  document.getElementById('equipModalTitle').textContent='Edit Equipment';
+  document.getElementById('editEquipId').value=id;
+  document.getElementById('eqName').value=e.name;
+  document.getElementById('eqModel').value=e.model;
+  document.getElementById('eqIcon').value=e.icon;
+  document.getElementById('eqStatus').value=e.status;
+  document.getElementById('eqProject').value=e.project||'';
+  document.getElementById('eqMaintDate').value=e.maintDate||'';
+  openModal('addEquipModal');
+}
+function deleteEquipment(id){
+  const e=DB.equipment.find(x=>x.id===id);if(!e)return;
+  showConfirm('Delete Equipment',`Delete "${e.name}"?`,'Delete','btn-danger',()=>{
+    DB.equipment=DB.equipment.filter(x=>x.id!==id);
+    showToast('Equipment deleted.','');renderEquipmentStats();renderEquipmentGrid();renderDashboard();
+  });
+}
+
+// ═══════════════ BOQ ═══════════════
+function renderBOQPage(){
+  document.getElementById('boqProject').innerHTML='<option value="">Select Project…</option>'+DB.projects.map(p=>`<option value="${p.id}">${p.name}</option>`).join('');
+  renderBOQ();
+}
+function renderBOQ(){
+  const prjId=document.getElementById('boqProject')?.value||'';
+  if(!prjId){
+    document.getElementById('boqTableBody').innerHTML='<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:32px">Select a project to view its BOQ</td></tr>';
+    document.getElementById('boqTotal').textContent='₱0.00';
+    document.getElementById('boqProjectBadge').textContent='No project selected';
+    document.getElementById('boqSummary').innerHTML='<div style="text-align:center;color:var(--gray-400);padding:24px 0;font-size:13px;">Select a project to view budget summary.</div>';
+    document.getElementById('costBars').innerHTML='';
+    return;
+  }
+  const items=DB.boqItems[prjId]||[];
+  const prj=DB.projects.find(p=>p.id===prjId);
+  document.getElementById('boqProjectBadge').textContent=prj?prj.name:'';
+  document.getElementById('boqTableBody').innerHTML=items.length?items.map((item,idx)=>`<tr>
+    <td>${idx+1}</td>
+    <td><strong>${item.desc}</strong><br><span style="font-size:11px;color:var(--gray-400)">${item.cat}</span></td>
+    <td>${item.unit}</td>
+    <td style="text-align:right">${item.qty.toLocaleString()}</td>
+    <td style="text-align:right">${item.unitCost.toLocaleString('en-PH',{minimumFractionDigits:2})}</td>
+    <td style="text-align:right;font-weight:700">${fmtMoney(item.qty*item.unitCost)}</td>
+    <td><button class="btn btn-ghost btn-sm" onclick="editBOQItem('${prjId}','${item.id}')">Edit</button> <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteBOQItem('${prjId}','${item.id}')">Delete</button></td>
+  </tr>`).join(''):
+  '<tr><td colspan="7" style="text-align:center;color:var(--gray-400);padding:32px">No BOQ items yet. Click "+ Add Item" to start.</td></tr>';
+  const total=items.reduce((s,i)=>s+i.qty*i.unitCost,0);
+  document.getElementById('boqTotal').textContent=fmtMoney(total);
+  // Summary
+  const contract=prj?prj.contract:0;
+  const variance=contract-total;
+  document.getElementById('boqSummary').innerHTML=`
+    <div style="display:flex;flex-direction:column;gap:12px;">
+      <div style="display:flex;justify-content:space-between;"><span style="color:var(--gray-600)">Contract Amount</span><strong>${fmtMoney(contract)}</strong></div>
+      <div style="display:flex;justify-content:space-between;"><span style="color:var(--gray-600)">BOQ Total</span><strong>${fmtMoney(total)}</strong></div>
+      <div style="border-top:1px solid var(--gray-100);padding-top:12px;display:flex;justify-content:space-between;"><span style="color:var(--gray-600)">Variance</span><strong style="color:${variance>=0?'var(--green)':'var(--red)'}">${variance>=0?'+':''}${fmtMoney(variance)}</strong></div>
+      <div style="background:var(--gray-50);border-radius:8px;padding:12px;font-size:12px;color:var(--gray-600)">${variance>=0?'✅ BOQ is within contract amount.':'⚠️ BOQ exceeds contract. Review line items.'}</div>
+    </div>`;
+  // Cost breakdown bars
+  const cats=['Labor','Materials','Equipment','Overhead','Other'];
+  const catTotals=cats.map(c=>({c,v:items.filter(i=>i.cat===c).reduce((s,i)=>s+i.qty*i.unitCost,0)}));
+  const maxVal=Math.max(...catTotals.map(x=>x.v),1);
+  const barColors=['var(--blue)','var(--accent)','var(--green)','var(--purple)','var(--gray-400)'];
+  document.getElementById('costBars').innerHTML=catTotals.map((x,i)=>`
+    <div class="cost-bar-wrap">
+      <div class="cost-bar" style="height:${(x.v/maxVal*100).toFixed(0)}%;background:${barColors[i]};min-height:${x.v>0?'4px':'0'}" title="${x.c}: ${fmtMoney(x.v)}"></div>
+      <div class="cost-bar-label">${x.c}</div>
+    </div>`).join('');
+}
+function saveBOQItem(){
+  const prjId=document.getElementById('boqProject')?.value;
+  if(!prjId){showToast('Select a project first.','error');return;}
+  const desc=document.getElementById('boqDesc').value.trim();
+  const qty=+document.getElementById('boqQty').value;
+  const unitCost=+document.getElementById('boqUnitCost').value;
+  if(!desc||!qty||!unitCost){showToast('Fill in all required fields.','error');return;}
+  if(!DB.boqItems[prjId])DB.boqItems[prjId]=[];
+  const editId=document.getElementById('editBOQId').value;
+  const data={desc,unit:document.getElementById('boqUnit').value,qty,unitCost,cat:document.getElementById('boqCat').value};
+  if(editId){
+    const idx=DB.boqItems[prjId].findIndex(x=>x.id===editId);
+    if(idx>=0)DB.boqItems[prjId][idx]={...DB.boqItems[prjId][idx],...data};
+    showToast('BOQ item updated.','success');
+  } else {
+    const newId='BOQ-'+Date.now();
+    DB.boqItems[prjId].push({id:newId,...data});
+    showToast('BOQ item added!','success');
+  }
+  document.getElementById('editBOQId').value='';
+  document.getElementById('boqModalTitle').textContent='Add BOQ Item';
+  closeModal('addBOQModal');
+  ['boqDesc','boqQty','boqUnitCost'].forEach(id=>document.getElementById(id).value='');
+  renderBOQ();
+}
+function editBOQItem(prjId,itemId){
+  const items=DB.boqItems[prjId]||[];
+  const item=items.find(x=>x.id===itemId);if(!item)return;
+  document.getElementById('boqModalTitle').textContent='Edit BOQ Item';
+  document.getElementById('editBOQId').value=itemId;
+  document.getElementById('boqDesc').value=item.desc;
+  document.getElementById('boqUnit').value=item.unit;
+  document.getElementById('boqQty').value=item.qty;
+  document.getElementById('boqUnitCost').value=item.unitCost;
+  document.getElementById('boqCat').value=item.cat;
+  openModal('addBOQModal');
+}
+function deleteBOQItem(prjId,itemId){
+  showConfirm('Delete BOQ Item','Delete this item from the BOQ?','Delete','btn-danger',()=>{
+    DB.boqItems[prjId]=DB.boqItems[prjId].filter(x=>x.id!==itemId);
+    showToast('BOQ item deleted.','');renderBOQ();
+  });
+}
+
+// ═══════════════ DOCUMENTS ═══════════════
+let _docFileSelected=false;
+function renderDocumentsPage(){renderDocuments();}
+function renderDocuments(){
+  const q=(document.getElementById('docSearch')?.value||'').toLowerCase();
+  const folder=document.getElementById('docFilterFolder')?.value||'';
+  const filtered=DB.documents.filter(d=>{
+    const matchQ=!q||(d.name+d.folder+d.project).toLowerCase().includes(q);
+    const matchF=!folder||d.folder===folder;
+    return matchQ&&matchF;
+  });
+  // Folders summary
+  const folders=[{name:'Drawings',icon:'📐'},{name:'Contracts',icon:'📜'},{name:'Reports',icon:'📊'},{name:'Permits',icon:'🏛️'},{name:'Invoices',icon:'🧾'}];
+  document.getElementById('docFolders').innerHTML=folders.map(f=>{
+    const count=DB.documents.filter(d=>d.folder===f.name).length;
+    return`<div class="card" style="cursor:pointer;transition:all .2s" onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='var(--shadow-md)'" onmouseout="this.style.transform='';this.style.boxShadow=''" onclick="document.getElementById('docFilterFolder').value='${f.name}';renderDocuments()">
+      <div class="card-body" style="text-align:center;padding:24px 16px;">
+        <div style="font-size:34px;margin-bottom:8px">${f.icon}</div>
+        <div style="font-family:'Syne',sans-serif;font-weight:700;font-size:14px">${f.name==='Drawings'?'Drawings & Plans':f.name==='Contracts'?'Contracts & MOA':f.name==='Reports'?'Project Reports':f.name==='Permits'?'Permits & Clearances':'Invoices & OR'}</div>
+        <div style="font-size:12px;color:var(--gray-400);margin-top:4px">${count} file${count!==1?'s':''}</div>
+      </div>
+    </div>`;
+  }).join('')+`<div class="card" style="cursor:pointer;border:2px dashed var(--gray-200);transition:all .2s" onmouseover="this.style.borderColor='var(--accent)'" onmouseout="this.style.borderColor='var(--gray-200)'" onclick="openModal('uploadDocModal')">
+    <div class="card-body" style="text-align:center;padding:24px 16px;color:var(--gray-400)">
+      <div style="font-size:34px;margin-bottom:8px">➕</div>
+      <div style="font-size:14px;font-weight:600">Upload New</div>
+      <div style="font-size:12px;margin-top:4px">Add a document</div>
+    </div>
+  </div>`;
+  document.getElementById('docListTitle').textContent=folder?folder+' Documents':'All Documents';
+  document.getElementById('docTableBody').innerHTML=filtered.map(d=>`<tr>
+    <td><strong>${d.name}</strong></td>
+    <td><span class="badge badge-gray">${d.folder}</span></td>
+    <td style="font-size:12px">${getProjectName(d.project)}</td>
+    <td>${d.by}</td>
+    <td>${fmtDate(d.date)}</td>
+    <td style="white-space:nowrap;">
+      <span class="badge badge-blue" style="font-size:10px">${d.ext}</span>
+      <button class="btn btn-ghost btn-sm" onclick="showToast('Opening ${d.name}… (simulated)','success')">View</button>
+      <button class="btn btn-ghost btn-sm" onclick="showToast('Downloading ${d.name}… (simulated)','')">Download</button>
+      <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteDocument('${d.id}')">Delete</button>
+    </td>
+  </tr>`).join('');
+}
+function simulateUpload(){
+  _docFileSelected=true;
+  document.getElementById('docFileLabel').textContent='✅ File selected (simulated)';
+  document.getElementById('docUploadZone').style.borderColor='var(--green)';
+}
+function saveDocument(){
+  const name=document.getElementById('docName').value.trim();
+  if(!name){showToast('Enter document name.','error');return;}
+  const folder=document.getElementById('docFolder').value;
+  const project=document.getElementById('docProject').value;
+  const extMap={Drawings:'DWG',Contracts:'PDF',Reports:'DOCX',Permits:'PDF',Invoices:'PDF'};
+  const newId='DOC-'+(DB.documents.length+1).toString().padStart(3,'0');
+  DB.documents.unshift({id:newId,name,folder,project,by:'Arabella Manao',date:today(),ext:extMap[folder]||'PDF'});
+  addActivity('📁','var(--purple-bg)',`Document uploaded: ${name}`);
+  showToast('Document uploaded!','success');
+  _docFileSelected=false;
+  document.getElementById('docFileLabel').textContent='PDF, DWG, DOCX up to 50MB';
+  document.getElementById('docUploadZone').style.borderColor='var(--gray-200)';
+  closeModal('uploadDocModal');
+  ['docName'].forEach(id=>document.getElementById(id).value='');
+  renderDocuments();buildSearchIndex();
+}
+function deleteDocument(id){
+  showConfirm('Delete Document','Delete this document?','Delete','btn-danger',()=>{
+    DB.documents=DB.documents.filter(x=>x.id!==id);
+    showToast('Document deleted.','');renderDocuments();
+  });
+}
+
+// ═══════════════ REPORTS ═══════════════
+function generateReport(type){
+  let title='',body='';
+  if(type==='projects'){
+    title='Project Progress Report';
+    body=`<table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr style="background:var(--gray-50)">${['Project','Location','Status','Progress','Contract'].map(h=>`<th style="padding:10px;text-align:left;border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}</tr></thead>
+      <tbody>${DB.projects.map(p=>`<tr><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${p.name}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${p.location}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${p.status}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${p.progress}%</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${fmtMoney(p.contract)}</td></tr>`).join('')}</tbody>
+    </table>`;
+  } else if(type==='cost'){
+    title='Cost & Expense Report';
+    const rows=DB.projects.map(p=>{const items=DB.boqItems[p.id]||[];const boq=items.reduce((s,i)=>s+i.qty*i.unitCost,0);return{p,boq};});
+    body=`<table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr style="background:var(--gray-50)">${['Project','Contract','BOQ Total','Variance'].map(h=>`<th style="padding:10px;text-align:left;border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}</tr></thead>
+      <tbody>${rows.map(({p,boq})=>{const v=p.contract-boq;return`<tr><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${p.name}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${fmtMoney(p.contract)}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${fmtMoney(boq)}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100);color:${v>=0?'var(--green)':'var(--red)'}">${v>=0?'+':''}${fmtMoney(v)}</td></tr>`;}).join('')}</tbody>
+    </table>`;
+  } else if(type==='payroll'){
+    title='Labor & Payroll Report';
+    body=`<table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr style="background:var(--gray-50)">${['Employee','Role','Project','Days','OT Hrs','Total Pay','Status'].map(h=>`<th style="padding:10px;text-align:left;border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}</tr></thead>
+      <tbody>${DB.workers.map(w=>{const tot=w.days*w.rate+w.ot*(w.rate/8)*1.25;return`<tr><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${w.name}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${w.role}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100);font-size:11px">${getProjectName(w.project)}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${w.days}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${w.ot}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100);font-weight:700">${fmtMoney(tot)}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${w.paid?'Paid':'Pending'}</td></tr>`;}).join('')}</tbody>
+    </table>`;
+  } else if(type==='inventory'){
+    title='Inventory & Materials Report';
+    body=`<table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr style="background:var(--gray-50)">${['Material','Category','Unit','In Stock','Min Level','Status'].map(h=>`<th style="padding:10px;text-align:left;border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}</tr></thead>
+      <tbody>${DB.inventory.map(i=>{const low=i.stock<i.min;return`<tr><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${i.name}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${i.category}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${i.unit}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100);color:${low?'var(--red)':'inherit'};font-weight:${low?'700':'400'}">${i.stock}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${i.min}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${low?'⚠️ Low Stock':'✅ Sufficient'}</td></tr>`;}).join('')}</tbody>
+    </table>`;
+  } else if(type==='equipment'){
+    title='Equipment Utilization Report';
+    body=`<table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr style="background:var(--gray-50)">${['Equipment','Model','Status','Assigned Project','Maintenance Date'].map(h=>`<th style="padding:10px;text-align:left;border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}</tr></thead>
+      <tbody>${DB.equipment.map(e=>`<tr><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${e.icon} ${e.name}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${e.model}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${e.status}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100);font-size:11px">${e.project?getProjectName(e.project):'—'}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${fmtDate(e.maintDate)||'—'}</td></tr>`).join('')}</tbody>
+    </table>`;
+  } else if(type==='dailyreports'){
+    title='Daily Site Reports Summary';
+    body=`<table style="width:100%;border-collapse:collapse;font-size:13px">
+      <thead><tr style="background:var(--gray-50)">${['Report ID','Date','Project','Engineer','Workers','Status'].map(h=>`<th style="padding:10px;text-align:left;border-bottom:1px solid var(--gray-200)">${h}</th>`).join('')}</tr></thead>
+      <tbody>${DB.reports.map(r=>`<tr><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${r.id}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${fmtDate(r.date)}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100);font-size:11px">${getProjectName(r.project)}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${r.engineer}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${r.workers}</td><td style="padding:10px;border-bottom:1px solid var(--gray-100)">${r.status}</td></tr>`).join('')}</tbody>
+    </table>`;
+  }
+  const now=new Date().toLocaleDateString('en-PH',{year:'numeric',month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'});
+  document.getElementById('rptPreviewTitle').textContent=title;
+  document.getElementById('rptPreviewBody').innerHTML=`
+    <div style="margin-bottom:20px;padding-bottom:16px;border-bottom:1px solid var(--gray-100);">
+      <div style="font-family:'Syne',sans-serif;font-size:20px;font-weight:800">${title}</div>
+      <div style="font-size:12px;color:var(--gray-400);margin-top:4px">Generated by Aventri Engineering Services · ${now}</div>
+    </div>${body}`;
+  openModal('reportPreviewModal');
+}
+function printReport(){window.print();}
+
+// ═══════════════ USERS ═══════════════
+function renderUsersPage(){
+  const active=DB.users.filter(u=>u.status==='Active').length;
+  document.getElementById('usersCountBadge').textContent=active+' Active User'+(active!==1?'s':'');
+  document.getElementById('usersTableBody').innerHTML=DB.users.map(u=>`<tr>
+    <td><div style="display:flex;align-items:center;gap:10px">
+      <div style="width:32px;height:32px;border-radius:8px;background:${u.color};color:#fff;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;font-family:'Syne',sans-serif">${u.initials}</div>
+      <div><div style="font-weight:600">${u.name}</div><div style="font-size:11px;color:var(--gray-400)">${u.role}</div></div>
+    </div></td>
+    <td><span class="badge ${u.role==='Admin'?'badge-red':u.role==='Engineer'?'badge-blue':u.role==='Accountant'?'badge-yellow':'badge-gray'}">${u.role}</span></td>
+    <td>${u.email}</td>
+    <td>${u.lastLogin}</td>
+    <td><span class="badge ${getStatusBadge(u.status)}">${u.status}</span></td>
+    <td><button class="btn btn-ghost btn-sm" onclick="editUser('${u.id}')">Edit</button> <button class="btn btn-ghost btn-sm" style="color:var(--red)" onclick="deleteUser('${u.id}')">Delete</button></td>
+  </tr>`).join('');
+}
+function saveUser(){
+  const name=document.getElementById('usrName').value.trim();
+  const email=document.getElementById('usrEmail').value.trim();
+  const role=document.getElementById('usrRole').value;
+  if(!name||!email){showToast('Fill in required fields.','error');return;}
+  const editId=document.getElementById('editUserId').value;
+  const roleColors={'Admin':'var(--red)','Engineer':'var(--blue)','Accountant':'var(--green)','Staff':'var(--purple)'};
+  const data={name,role,email,status:document.getElementById('usrStatus').value,initials:initials(name),color:roleColors[role]||'var(--gray-400)',lastLogin:'Never'};
+  if(editId){
+    const idx=DB.users.findIndex(x=>x.id===editId);
+    if(idx>=0)DB.users[idx]={...DB.users[idx],...data};
+    showToast('User updated.','success');
+  } else {
+    if(DB.users.find(u=>u.email===email)){showToast('Email already exists.','error');return;}
+    const newId='USR-'+(DB.users.length+1).toString().padStart(3,'0');
+    DB.users.push({id:newId,...data});
+    showToast('User added!','success');
+    addActivity('👤','var(--blue-bg)',`New user added: ${name} (${role})`);
+  }
+  document.getElementById('editUserId').value='';
+  document.getElementById('userModalTitle').textContent='Add User';
+  closeModal('addUserModal');
+  renderUsersPage();buildSearchIndex();
+  ['usrName','usrEmail','usrPass'].forEach(id=>document.getElementById(id).value='');
+}
+function editUser(id){
+  const u=DB.users.find(x=>x.id===id);if(!u)return;
+  document.getElementById('userModalTitle').textContent='Edit User';
+  document.getElementById('editUserId').value=id;
+  document.getElementById('usrName').value=u.name;
+  document.getElementById('usrRole').value=u.role;
+  document.getElementById('usrEmail').value=u.email;
+  document.getElementById('usrStatus').value=u.status;
+  openModal('addUserModal');
+}
+function deleteUser(id){
+  const u=DB.users.find(x=>x.id===id);if(!u)return;
+  if(u.id==='USR-001'){showToast('Cannot delete the primary administrator.','error');return;}
+  showConfirm('Delete User',`Delete user "${u.name}"?`,'Delete','btn-danger',()=>{
+    DB.users=DB.users.filter(x=>x.id!==id);
+    showToast('User deleted.','');renderUsersPage();buildSearchIndex();
+  });
+}
+
+// ═══════════════ LOGOUT ═══════════════
+function handleLogout(){
+  showConfirm('Sign Out','Are you sure you want to sign out?','Sign Out','btn-danger',()=>{
+    showToast('Signing out…','');
+    setTimeout(()=>{
+      document.body.innerHTML='<div style="display:flex;align-items:center;justify-content:center;min-height:100vh;background:var(--navy);font-family:Syne,sans-serif;color:#fff;text-align:center"><div><div style="font-size:48px;margin-bottom:16px">🔒</div><div style="font-size:24px;font-weight:800;margin-bottom:8px">You have been signed out</div><div style="font-size:14px;color:var(--gray-400)">Aventri Engineering Services · Construction Information System</div><button onclick="location.reload()" style="margin-top:24px;padding:12px 28px;background:var(--accent);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:\'DM Sans\',sans-serif">Sign In Again</button></div></div>';
+    },1200);
+  });
+}
+
+// ═══════════════ INIT ═══════════════
+function init(){
+  // Animate progress bars
+  document.querySelectorAll('.progress-bar-fill').forEach(bar=>{
+    const w=bar.style.width;bar.style.width='0%';
+    setTimeout(()=>{bar.style.transition='width 1s ease';bar.style.width=w;},300);
+  });
+  populateProjectDropdowns();
+  buildSearchIndex();
+  renderNotifications();
+  updateNotifBadge();
+  renderDashboard();
+  // Set initial dates
+  document.getElementById('rptDate').value=today();
+  const mrDate=document.getElementById('mrDateNeeded');if(mrDate)mrDate.value=today();
+}
+
+window.addEventListener('load',init);
+</script>
+</body>
+</html>
